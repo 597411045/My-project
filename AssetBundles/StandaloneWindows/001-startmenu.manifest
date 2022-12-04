@@ -1,0 +1,64 @@
+ManifestFileVersion: 0
+CRC: 3353367812
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 43c0729710db91e6eadee96777a2359f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c90fc19e2679e5295d10bd00f33cb4c3
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- "Assets/Download/UI - new/001-startmenu/btn_\u6D41\u75453.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u516C\u5171\u84DD4.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u7EA24.png"
+- "Assets/Download/UI - new/001-startmenu/bg_\u9009\u670D\u5E95.png"
+- Assets/Download/UI - new/001-startmenu/pic_logo.png
+- "Assets/Download/UI - new/001-startmenu/btn_\u706B\u72062.png"
+- "Assets/Download/UI - new/001-startmenu/btn_2\u8FD4\u56DE1.png"
+- "Assets/Download/UI - new/001-startmenu/btn_2\u8FD4\u56DE2.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u7EA21.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u6D41\u75454.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u6D41\u75452.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u516C\u5171\u84DD3.png"
+- "Assets/Download/UI - new/001-startmenu/btn_2\u8FD4\u56DE4.png"
+- "Assets/Download/UI - new/001-startmenu/\u6DF1\u84DD3.png"
+- "Assets/Download/UI - new/001-startmenu/bg_\u8FDB\u5165\u6E38\u620F\u5E95\u677F.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u8FDB\u5EA6\u4EBA\u7269.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u4E911.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u7EA22.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u811A\u4E0B\u4E911.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u5173\u95ED3.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u5173\u95ED1.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u4E912.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u6DF1\u84DD1.png"
+- "Assets/Download/UI - new/001-startmenu/bg_\u6CE8\u518C.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u811A\u4E0B\u4E912.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u5173\u95ED4.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u6D41\u75451.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u6DF1\u84DD.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u5173\u95ED2.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u6DF1\u84DD4.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u8FDB\u5EA6\u6761\u7279\u6548.png"
+- "Assets/Download/UI - new/001-startmenu/\u6DF1\u84DD2.png"
+- "Assets/Download/UI - new/001-startmenu/btn_2\u8FD4\u56DE3.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u4FE1\u606F\u5E95.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u6CE8\u518C\u8F93\u5165\u6846.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u8FDB\u5EA6\u6761.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u516C\u5171\u84DD2.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u706B\u72061.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u706B\u72063.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u8FDB\u5EA6\u6761\u5E95.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u7EA23.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u706B\u72064.png"
+- "Assets/Download/UI - new/001-startmenu/bg_\u516C\u544A\u5E95.png"
+- "Assets/Download/UI - new/001-startmenu/btn_\u516C\u5171\u84DD1.png"
+- "Assets/Download/UI - new/001-startmenu/pic_\u4EBA\u7269.png"
+- Assets/Download/UI - new/001-startmenu/BG.png
+Dependencies: []

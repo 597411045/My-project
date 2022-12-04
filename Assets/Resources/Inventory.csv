@@ -1,0 +1,14 @@
+﻿id,name,profile,type,exp,level,quality,power,price,atk,life,description,count
+1001,TestName,小体力丹,Consume,0,1,1,0,100,5,7,TestDescription,1
+1002,TestName2,大体力丹,Consume,0,1,1,0,100,5,7,TestDescription2,1
+1003,Head1,Head,Head,0,1,1,0,500,1,1,Head1,1
+1004,Cloth1,Cloth,Cloth,0,1,1,0,500,1,1,Cloth1,1
+1005,Weapon1,Weapon,Weapon,0,1,1,0,500,1,1,Weapon1,1
+1006,Shoes1,Shoes,Shoes,0,1,1,0,500,1,1,Shoes1,1
+1007,Necklace1,Necklace,Necklace,0,1,1,0,500,1,1,Necklace1,1
+1008,Bracelet1,Bracelet,Bracelet,0,1,1,0,500,1,1,Bracelet1,1
+1009,Ring1,Ring,Ring,0,1,1,0,500,1,1,Ring1,1
+1010,Wing1,Wing,Wing,0,1,1,0,500,1,1,Wing1,1
+1011,Head2,Head,Head,0,2,2,0,1000,2,2,Head2,1
+1012,Cloth2,Cloth,Cloth,0,2,2,0,1000,2,2,Cloth2,1
+1013,Weapon2,Weapon,Weapon,0,2,2,0,1000,2,2,Weapon2,1

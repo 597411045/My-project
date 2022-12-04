@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 4065461923
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: 001-startmenu
+      Dependencies: {}
