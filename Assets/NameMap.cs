@@ -21,6 +21,8 @@ static class NameMap
     public static string PanelItemDetail = "PanelItemDetail";
     public static string PanelEquipDetail = "PanelEquipDetail";
     public static string PanelMenu = "PanelMenu";
+    public static string PanelQuest = "PanelQuest";
+    public static string PanelSkill = "PanelSkill";
 
     public static string PanelFade = "PanelFade";
     public static string PanelShow = "PanelShow";

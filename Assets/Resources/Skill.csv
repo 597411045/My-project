@@ -1,0 +1,4 @@
+﻿id,name,profile,level,price,atk,life,description
+3001,Skill1,icon_li,1,100,11,21,技能1，伤害<atk>，恢复<life>
+3002,Skill2,icon_up,1,100,12,22,技能3，伤害<atk>，恢复<life>
+3003,Skill3,icon_zhu,1,100,13,23,技能3，伤害<atk>，恢复<life>

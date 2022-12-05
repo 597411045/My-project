@@ -14,7 +14,6 @@ public class Button_InVillage : MonoBehaviour
 
     public void OnRenameClick(Button b)
     {
-
         PanelManagerInVillage.Instance.NotificationText.text = "Input New Name";
         PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelNotification, () =>
         {
@@ -36,11 +35,18 @@ public class Button_InVillage : MonoBehaviour
         PanelManagerInVillage.Instance.NotificationInput.GetComponentInParent<InputField>().text = "";
         PanelManagerInVillage.Instance.ChangePanel(NameMap.PanelNotification, null);
     }
-    public void OnCloseAllInVillage(Button b)
+    public void OnPanelClose(Button b)
     {
         PanelManagerInVillage.Instance.ChangePanel(b.gameObject.transform.parent.gameObject.name, null);
     }
-    public void OnMenuAllInVillage(string names)
+    public void OnPanelOpen(string names)
+    {
+        foreach (string s in names.Split(','))
+        {
+            PanelManagerInVillage.Instance.ChangePanel(null, s);
+        }
+    }
+    public void OnTaskClick(string names)
     {
         foreach (string s in names.Split(','))
         {

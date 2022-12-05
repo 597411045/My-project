@@ -13,6 +13,8 @@ public class PanelManagerInVillage : MonoBehaviour
     public Dictionary<string, CustomPanel> Panels = new Dictionary<string, CustomPanel>();
     public SlotManager PlayerInventory;
     public SlotManager PlayerEquipmnent;
+    public SlotManager PlayerQuest;
+    public SlotManager PlayerSkill;
 
     public Image HPBar;
     public Image MPBar;
@@ -24,8 +26,6 @@ public class PanelManagerInVillage : MonoBehaviour
 
     private void Awake()
     {
-
-
         if (Instance == null)
         {
             Instance = this;
@@ -52,13 +52,21 @@ public class PanelManagerInVillage : MonoBehaviour
         Panels.Add(NameMap.PanelItemDetail, new CustomPanel(this.transform.Find(NameMap.PanelItemDetail).gameObject));
         Panels.Add(NameMap.PanelEquipDetail, new CustomPanel(this.transform.Find(NameMap.PanelEquipDetail).gameObject));
         Panels.Add(NameMap.PanelMenu, new CustomPanel(this.transform.Find(NameMap.PanelMenu).gameObject));
+        Panels.Add(NameMap.PanelQuest, new CustomPanel(this.transform.Find(NameMap.PanelQuest).gameObject));
+        Panels.Add(NameMap.PanelSkill, new CustomPanel(this.transform.Find(NameMap.PanelSkill).gameObject));
 
         PlayerInventory = new SlotManager(MyUtil.FindTransformInChildren(GameObject.Find("PanelInventory").transform, "Slots").gameObject, SlotType.Inventory);
         PlayerEquipmnent = new SlotManager(MyUtil.FindTransformInChildren(GameObject.Find("PanelEquipmnemt").transform, "Equips").gameObject, SlotType.Equipment);
+        PlayerQuest = new SlotManager(MyUtil.FindTransformInChildren(GameObject.Find("PanelQuest").transform, "Slots").gameObject, SlotType.Quest);
+        PlayerSkill = new SlotManager(MyUtil.FindTransformInChildren(GameObject.Find("PanelSkill").transform, "Slots").gameObject, SlotType.Skill);
     }
 
     void Start()
     {
+        GameManagerInVillage.Player = new PlayerInfo();
+        QuestInfo q = new QuestInfo();
+        SkillInfo s = new SkillInfo();
+
         Panels[NameMap.PanelCharacterInfo].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelNotification].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelEquipmnemt].GameObjectPanel.SetActive(false);
@@ -66,6 +74,8 @@ public class PanelManagerInVillage : MonoBehaviour
         Panels[NameMap.PanelItemDetail].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelEquipDetail].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelMenu].GameObjectPanel.SetActive(false);
+        Panels[NameMap.PanelQuest].GameObjectPanel.SetActive(false);
+        Panels[NameMap.PanelSkill].GameObjectPanel.SetActive(false);
     }
 
     private void SetPanel(string panelName, PanelAction a)

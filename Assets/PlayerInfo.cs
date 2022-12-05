@@ -195,6 +195,7 @@ public class PlayerInfo
     public Dictionary<ItemType, ItemInfo> Equipments;
     public Dictionary<int, ItemInfo> Inventory;
     public Dictionary<int, QuestInfo> Quests;
+    public Dictionary<int, SkillInfo> Skill;
 
 
 
@@ -223,11 +224,14 @@ public class PlayerInfo
             {ItemType.Wing,null }
         };
         Inventory = new Dictionary<int, ItemInfo>();
+        Skill = new Dictionary<int, SkillInfo>();
         LinkPropertyToUI();
         InitDefaultValue();
         GetBaseValue();
         BuildRandomPlayerInventory();//GetInventory();
         BuildRandomPlayerEquipments();//GetEquipments();
+        BuildPlayerSkill();
+
     }
     public PlayerInfo(bool flag)
     {
@@ -296,8 +300,9 @@ public class PlayerInfo
             {
                 RegisterDynamicValueChange(PowerTexts, PowerBeforeUnequip, _life + _atk, 3);
             }
-            else { 
-            RegisterDynamicValueChange(PowerTexts, _power, _life + _atk, 3);
+            else
+            {
+                RegisterDynamicValueChange(PowerTexts, _power, _life + _atk, 3);
             }
             _power = _life + _atk;
             PanelManagerInVillage.Instance.PlayerEquipmnent.TryGetItemFrom(item, PanelManagerInVillage.Instance.PlayerInventory);
@@ -395,6 +400,14 @@ public class PlayerInfo
             TryPickItem(item);
         }
 
+    }
+    private void BuildPlayerSkill()
+    {
+        for (int i = 0; i < SkillInfo.BaseItemList.Count; i++)
+        {
+            Skill.Add(SkillInfo.BaseItemList[i].Id, SkillInfo.BaseItemList[i].Clone());
+            PanelManagerInVillage.Instance.PlayerSkill.TryAddSkill(Skill[SkillInfo.BaseItemList[i].Id]);
+        }
     }
     private void BuildRandomPlayerEquipments()
     {

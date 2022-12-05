@@ -10,8 +10,6 @@ using UnityEngine.UI;
 public class QuestInfo
 {
     public static List<QuestInfo> BaseQuestList = new List<QuestInfo>();
-    public GameObject GameObjectItem;
-    public SlotType slotType;
 
     private int _id;
     private string _name;
@@ -22,6 +20,17 @@ public class QuestInfo
     private int _rewardBaseItemId = 0;
     private string _description;
 
+    public static string Accept = "Accept";
+    public static string Abandon = "Abandon";
+    public static string Finish = "Finish";
+
+    public Vector3 NPCPosition;
+    public Text StatusUI;
+    public void SetStatus(string s)
+    {
+        StatusUI.text = s;
+    }
+
     public int Id { get => _id; set => _id = value; }
     public string Name { get => _name; set => _name = value; }
     public string Profile { get => _profile; set => _profile = value; }
@@ -29,18 +38,25 @@ public class QuestInfo
     public int RewardCoin { get => _rewardCoin; set => _rewardCoin = value; }
     public int RewardBaseItemId { get => _rewardBaseItemId; set => _rewardBaseItemId = value; }
     public string Description { get => _description; set => _description = value; }
-    
+
 
     static QuestInfo()
     {
         GetBaseListFromCSV();
+        BuildPlayerQuest();
     }
+
+    public QuestInfo()
+    {
+
+    }
+
     public static void GetBaseListFromCSV()
     {
         TextAsset t = Resources.Load<TextAsset>("Quest");
         string[] lines = t.ToString().Replace("\r", "").Split('\n');
 
-        QuestInfo questInfo = new QuestInfo();
+        QuestInfo questInfo;
         //PropertyInfo[] propertys = itemInfo.GetType().GetProperties();
         PropertyInfo[] propertys = typeof(QuestInfo).GetProperties();
 
@@ -66,14 +82,11 @@ public class QuestInfo
         }
     }
 
-    //public ItemInfo Clone()
-    //{
-    //    ItemInfo item = new ItemInfo();
-    //    PropertyInfo[] propertys = item.GetType().GetProperties();
-    //    for (int i = 0; i < propertys.Length; i++)
-    //    {
-    //        propertys[i].SetValue(item, propertys[i].GetValue(this));
-    //    }
-    //    return item;
-    //}
+    private static void BuildPlayerQuest()
+    {
+        foreach (var item in BaseQuestList)
+        {
+            PanelManagerInVillage.Instance.PlayerQuest.TryAddQuest(item);
+        }
+    }
 }

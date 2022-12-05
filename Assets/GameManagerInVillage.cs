@@ -21,8 +21,6 @@ public class GameManagerInVillage : MonoBehaviour
         {
             Destroy(this);
         }
-        Player = new PlayerInfo();
-        QuestInfo q = new QuestInfo();
     }
 
     private void Start()
