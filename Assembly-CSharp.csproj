@@ -64,21 +64,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Button_InStartMenu.cs" />
-    <Compile Include="Assets\Button_InVillage.cs" />
     <Compile Include="Assets\Button_PlayVoiceAndChangeText.cs" />
-    <Compile Include="Assets\GameManagerInVillage.cs" />
+    <Compile Include="Assets\EffectExamples\Misc Effects\Scripts\SpawnEffect.cs" />
+    <Compile Include="Assets\GameManager\Button_InStartMenu.cs" />
+    <Compile Include="Assets\GameManager\Button_InVillage.cs" />
+    <Compile Include="Assets\GameManager\GameManagerInVillage.cs" />
+    <Compile Include="Assets\GameManager\NameMap.cs" />
+    <Compile Include="Assets\GameManager\PanelManager.cs" />
+    <Compile Include="Assets\GameManager\PanelManagerInVillage.cs" />
     <Compile Include="Assets\HoverScript.cs" />
-    <Compile Include="Assets\ItemDragScript.cs" />
-    <Compile Include="Assets\ItemInfo.cs" />
+    <Compile Include="Assets\MVC_Control\Control_ItemInfo.cs" />
+    <Compile Include="Assets\MVC_Control\Control_PlayerInfo.cs" />
+    <Compile Include="Assets\MVC_Module\Module_ItemInfo.cs" />
+    <Compile Include="Assets\MVC_Module\Module_PlayerInfo.cs" />
+    <Compile Include="Assets\MVC_Module\QuestInfo.cs" />
+    <Compile Include="Assets\MVC_Module\SkillInfo.cs" />
+    <Compile Include="Assets\MVC_View\SkillDragScript.cs" />
+    <Compile Include="Assets\MVC_View\View_ItemInfo.cs" />
+    <Compile Include="Assets\MVC_View\View_PlayerInfo.cs" />
     <Compile Include="Assets\MyUtil.cs" />
-    <Compile Include="Assets\NameMap.cs" />
-    <Compile Include="Assets\PanelManager.cs" />
-    <Compile Include="Assets\PanelManagerInVillage.cs" />
     <Compile Include="Assets\Panel_FadeAndShow.cs" />
     <Compile Include="Assets\PlayMoveScript.cs" />
-    <Compile Include="Assets\PlayerInfo.cs" />
-    <Compile Include="Assets\QuestInfo.cs" />
     <Compile Include="Assets\ServerUnitScript.cs" />
     <Compile Include="Assets\SlotManager.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -88,9 +94,12 @@
     <None Include="Assets\Download\Skill         技能信息清单.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\EffectExamples\Misc Effects\Prefabs\Readme_Dissolve_Respawn_.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Download\Inventory.txt" />
+    <None Include="Assets\EffectExamples\Magic Effects\Shaders\Ice.shader" />
     <None Include="Assets\Download\UI - new\005-number combo\number_font.fnt" />
+    <None Include="Assets\EffectExamples\Misc Effects\Shaders\Respawn.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
@@ -103,10 +112,12 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Download\Task        任务信息清单.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\EffectExamples\Misc Effects\Shaders\FireFly.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\EffectExamples\Misc Effects\Shaders\Dissolve.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
     <Reference Include="UnityEngine">
       <HintPath>E:/Unity/Editor/2019.4.21/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -669,6 +680,9 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -687,17 +701,14 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+      <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Cinemachine">
-      <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.cinemachine.editor">
-      <HintPath>C:/Users/AC/Desktop/My project/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>

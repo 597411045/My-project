@@ -20,10 +20,10 @@ public class HoverScript : MonoBehaviour, IDragHandler, IPointerClickHandler
     private void Awake()
     {
         if (RotateMode)
-            go = MyUtil.FindTransformInChildren(GameObject.Find(NameMap.PanelCharacter).transform, "RolePosition").gameObject;
+            go = MyUtil.FindOneInChildren(GameObject.Find(NameMap.PanelCharacter).transform, "RolePosition").gameObject;
         if (RouletteMode)
         {
-            go = MyUtil.FindTransformInChildren(GameObject.Find(NameMap.PanelSelectCharacter).transform, "Wheel").gameObject;
+            go = MyUtil.FindOneInChildren(GameObject.Find(NameMap.PanelSelectCharacter).transform, "Wheel").gameObject;
             animator = go.GetComponent<Animator>();
         }
     }
@@ -33,12 +33,12 @@ public class HoverScript : MonoBehaviour, IDragHandler, IPointerClickHandler
         if (this.gameObject.name.Contains("Right"))
         {
             animator.SetBool(NameMap.AniTurnLeft, true);
-            PlayerInfo.CharacterIndex = (PlayerInfo.CharacterIndex + 4 - 1) % 4;
+            Module_PlayerInfo.CharacterId = (Module_PlayerInfo.CharacterId + 4 - 1) % 4;
         }
         if (this.gameObject.name.Contains("Left"))
         {
             animator.SetBool(NameMap.AniTurnRight, true);
-            PlayerInfo.CharacterIndex = (PlayerInfo.CharacterIndex + 1) % 4;
+            Module_PlayerInfo.CharacterId = (Module_PlayerInfo.CharacterId + 1) % 4;
         }
     }
 }

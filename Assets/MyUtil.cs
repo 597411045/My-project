@@ -10,16 +10,16 @@ using UnityEngine;
 public static class MyUtil
 {
     public static string mainPath = Application.dataPath + "/Resources";
-    
 
-    public static Transform FindTransformInChildren(Transform t, string childName)
+
+    public static Transform FindOneInChildren(Transform t, string childName)
     {
         Transform tmp = t.Find(childName);
         if (tmp == null)
         {
             for (int i = 0; i < t.childCount; i++)
             {
-                tmp = FindTransformInChildren(t.GetChild(i), childName);
+                tmp = FindOneInChildren(t.GetChild(i), childName);
                 if (tmp != null)
                 {
                     return tmp;
@@ -29,11 +29,25 @@ public static class MyUtil
         return tmp;
     }
 
+    public static void FindAllInChildren(List<Transform> Transforms, Transform t, string childName)
+    {
+        for (int i = 0; i < t.childCount; i++)
+        {
+            if (t.GetChild(i).gameObject.name.Contains(childName))
+            {
+                Transforms.Add(t.GetChild(i));
+            }
+            FindAllInChildren(Transforms, t.GetChild(i), childName);
+        }
+    }
+
+
     public static void ChangeLayerIncludeChildren(Transform t, int layer)
     {
         t.gameObject.layer = layer;
-        if (t.childCount > 0){
-            for(int i = 0; i < t.childCount; i++)
+        if (t.childCount > 0)
+        {
+            for (int i = 0; i < t.childCount; i++)
             {
                 t.GetChild(i).gameObject.layer = layer;
                 ChangeLayerIncludeChildren(t.GetChild(i), layer);
