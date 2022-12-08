@@ -13,38 +13,75 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public SlotType slotType;
     public Control_ItemInfo c;
 
-    public Text IdUI;
-    public Text NameUI;
-    public Image ProfileUI;
-    public Text TypeUI;
-    public Text ExpUI;
-    public Text LevelUI;
-    public Text QualityUI;
-    public Text PowerUI;
-    public Text PriceUI;
-    public Text AtkUI;
-    public Text LifeUI;
-    public Text CountUI;
-    public Text DescriptionUI;
+    public List<Text> IdUI = new List<Text>();
+    public List<Text> NameUI = new List<Text>();
+    public List<Image> ProfileUI = new List<Image>();
+    public List<Text> TypeUI = new List<Text>();
+    public List<Text> ExpUI = new List<Text>();
+    public List<Text> LevelUI = new List<Text>();
+    public List<Text> QualityUI = new List<Text>();
+    public List<Text> PowerUI = new List<Text>();
+    public List<Text> PriceUI = new List<Text>();
+    public List<Text> AtkUI = new List<Text>();
+    public List<Text> LifeUI = new List<Text>();
+    public List<Text> CountUI = new List<Text>();
+    public List<Text> DescriptionUI = new List<Text>();
+
 
     public void IdUIAction(object sender, int arg)
     {
-        if(IdUI!=null)IdUI.text = arg.ToString();
+        foreach (var i in IdUI) { i.text = arg.ToString(); }
+    }
+    public void NameUIAction(object sender, string arg)
+    {
+        foreach (var i in NameUI) { i.text = arg.ToString(); }
+    }
+    public void TypeUIAction(object sender, ItemType arg)
+    {
+        foreach (var i in TypeUI) { i.text = arg.ToString(); }
+    }
+    public void ExpUIAction(object sender, int arg)
+    {
+        foreach (var i in ExpUI) { i.text = arg.ToString(); }
+    }
+    public void LevelUIAction(object sender, int arg)
+    {
+        foreach (var i in LevelUI) { i.text = arg.ToString(); }
+    }
+    public void QualityUIAction(object sender, int arg)
+    {
+        foreach (var i in QualityUI) { i.text = arg.ToString(); }
+    }
+    public void PowerUIAction(object sender, int arg)
+    {
+        foreach (var i in PowerUI) { i.text = arg.ToString(); }
+    }
+    public void PriceUIAction(object sender, int arg)
+    {
+        foreach (var i in PriceUI) { i.text = arg.ToString(); }
+    }
+    public void AtkUIAction(object sender, int arg)
+    {
+        foreach (var i in AtkUI) { i.text = arg.ToString(); }
+    }
+    public void LifeUIAction(object sender, int arg)
+    {
+        foreach (var i in LifeUI) { i.text = arg.ToString(); }
     }
 
     public void CountUIAction(object sender, int arg)
     {
-        if (CountUI != null) CountUI.text = arg.ToString();
+        foreach (var i in CountUI) { i.text = arg.ToString(); }
     }
 
     public void DescriptionUIAction(object sender, string arg)
     {
-        if (DescriptionUI != null) DescriptionUI.text = arg.ToString();
+        foreach (var i in DescriptionUI) { i.text = arg.ToString(); }
     }
 
     public void ProfileUIAction(object sender, string arg)
     {
-        if (ProfileUI != null) ProfileUI.sprite = Resources.Load<Sprite>(arg);
+        foreach (var i in ProfileUI) { i.sprite = Resources.Load<Sprite>(arg); }
     }
 
     private void Awake()
@@ -54,9 +91,9 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void BuildUIElements()
     {
         Canvas = GameObject.Find("Canvas").transform;
-        ProfileUI = this.gameObject.GetComponent<Image>();
-        CountUI = MyUtil.FindOneInChildren(this.transform, "Num").GetComponent<Text>();
-        IdUI = MyUtil.FindOneInChildren(this.transform, "Id").GetComponent<Text>();
+        ProfileUI.Add(this.gameObject.GetComponent<Image>());
+        CountUI.Add(MyUtil.FindOneInChildren(this.transform, "Num").GetComponent<Text>());
+        IdUI.Add(MyUtil.FindOneInChildren(this.transform, "Id").GetComponent<Text>());
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -81,7 +118,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             if (slotType == SlotType.Equipment)
             {
-                GameManagerInVillage.Player.TryUnequipItem(c.module.Type);
+                GameManagerInVillage.PlayerControl.TryUnequipItem(c.module.Type);
                 Release();
             }
             else
@@ -93,7 +130,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (eventData.pointerEnter.tag == ("Equipment") && c.module.Type != ItemType.Consume)
         {
-            GameManagerInVillage.Player.TryEquipItem(c.module);
+            GameManagerInVillage.PlayerControl.TryEquipItem(c.module);
             Release();
             return;
         }
@@ -141,7 +178,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             //PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelMenu, Camera.main.ScreenToWorldPoint(eventData.position) + Camera.main.transform.forward * 10);
             if (slotType == SlotType.Equipment)
             {
-                GameManagerInVillage.Player.TryUnequipItem(c.module.Type);
+                GameManagerInVillage.PlayerControl.TryUnequipItem(c.module.Type);
                 return;
             }
             if (slotType == SlotType.Inventory)
@@ -152,7 +189,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 }
                 else
                 {
-                    GameManagerInVillage.Player.TryEquipItem(c.module);
+                    GameManagerInVillage.PlayerControl.TryEquipItem(c.module);
                 }
                 return;
             }
@@ -165,7 +202,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelItemDetail, () =>
             {
-                PanelManagerInVillage.Instance.Panels[NameMap.PanelItemDetail].Item = c.module;
+                PanelManagerInVillage.Instance.Panels[NameMap.PanelItemDetail].Item = c.view;
                 RectTransform PanelRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelItemDetail].GameObjectPanel.GetComponent<RectTransform>();
                 RectTransform AlignedObjectRect = this.gameObject.GetComponent<RectTransform>();
                 PanelRect.position = AlignedObjectRect.position;
@@ -183,7 +220,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             {
                 PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelEquipDetail, () =>
                 {
-                    PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].Item = c.module;
+                    PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].Item = c.view;
                     RectTransform PanelRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].GameObjectPanel.GetComponent<RectTransform>();
                     RectTransform AlignedObjectRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelInventory].GameObjectPanel.GetComponent<RectTransform>();
                     PanelRect.position = AlignedObjectRect.position;
@@ -198,7 +235,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             {
                 PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelEquipDetail, () =>
                 {
-                    PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].Item = c.module;
+                    PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].Item = c.view;
                     RectTransform PanelRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].GameObjectPanel.GetComponent<RectTransform>();
                     RectTransform AlignedObjectRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipmnemt].GameObjectPanel.GetComponent<RectTransform>();
                     PanelRect.position = AlignedObjectRect.position;

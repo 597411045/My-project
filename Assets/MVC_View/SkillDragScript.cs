@@ -35,7 +35,7 @@ public class SkillDragScript : MonoBehaviour, IPointerClickHandler
         description.text = skill.Description.ToString()
                 .Replace("<atk>", skill.Atk.ToString())
                   .Replace("<life>", skill.Life.ToString())+"     Level:"+skill.Level.ToString();
-        if (GameManagerInVillage.Player.module.Coin > skill.Price)
+        if (GameManagerInVillage.PlayerControl.module.Coin > skill.Price)
         {
             hintText.text = "Upgrade";
             UpgradeButton.interactable = true;

@@ -17,15 +17,15 @@ public class Module_PlayerInfo
 
     private string _name;
     private string _profile;
-    private int _level = 1;
-    private int _power = 0;
-    private int _exp = 0;
-    private int _diamond = 0;
-    private int _coin = 0;
-    private int _hp = 0;
-    private int _mp = 0;
-    private int _atk = 0;
-    private int _life = 0;
+    private int _level;
+    private int _power;
+    private int _exp;
+    private int _diamond;
+    private int _coin;
+    private int _hp;
+    private int _mp;
+    private int _atk;
+    private int _life;
 
     //public delegate void NameHandlerDelegate(string s);
     //public EventHandler NameHandler;
@@ -79,6 +79,7 @@ public class Module_PlayerInfo
         set
         {
             _power = value;
+            _power = _life + _atk;
             if (PowerHandler != null)
             {
                 PowerHandler(null, _power);
@@ -156,20 +157,6 @@ public class Module_PlayerInfo
         }
     }
 
-    public EventHandler<int> LifeHandler;
-    public int Life
-    {
-        get { return _life; }
-        set
-        {
-            _life = value;
-            if (LifeHandler != null)
-            {
-                LifeHandler(null, _life);
-            }
-        }
-    }
-
     public EventHandler<int> AtkHandler;
     public int Atk
     {
@@ -184,25 +171,37 @@ public class Module_PlayerInfo
         }
     }
 
+    public EventHandler<int> LifeHandler;
+    public int Life
+    {
+        get { return _life; }
+        set
+        {
+            _life = value;
+            if (LifeHandler != null)
+            {
+                LifeHandler(null, _life);
+            }
+        }
+    }
+
+
+
     public Dictionary<ItemType, Module_ItemInfo> Equipments;
     public Dictionary<int, Module_ItemInfo> Inventory;
-    public Dictionary<int, QuestInfo> Quests;
+    public Dictionary<int, Module_QuestInfo> Quests;
     public Dictionary<int, SkillInfo> Skill;
 
-    public Module_PlayerInfo()
-    {
-        Name = "DefaultPlayerName";
-        Coin = 0;
-        Diamond = 0;
-        Hp = 0;
-        Mp = 0;
-        Level = 0;
-        Power = 0;
-        Exp = 0;
-        Life = 0;
-        Atk = 0;
 
-        Equipments = new Dictionary<ItemType, Module_ItemInfo>() {
+    public Module_PlayerInfo(PlayerType p)
+    {
+        if (p == PlayerType.Player)
+        {
+            GetPlayerDataFromCSV();
+            Inventory = new Dictionary<int, Module_ItemInfo>();
+            GetItemDataFromCSV();
+
+            Equipments = new Dictionary<ItemType, Module_ItemInfo>() {
             {ItemType.Head,null },
             {ItemType.Cloth,null },
             {ItemType.Weapon,null },
@@ -212,23 +211,80 @@ public class Module_PlayerInfo
             {ItemType.Ring,null },
             {ItemType.Wing,null }
         };
-        Inventory = new Dictionary<int, Module_ItemInfo>();
-        Skill = new Dictionary<int, SkillInfo>();
-        //GetBaseValue();
+            GetEquipDataFromCSV();
+
+            Quests = new Dictionary<int, Module_QuestInfo>();
+            GetQuestsDataFromCSV();
+
+            Skill = new Dictionary<int, SkillInfo>();
+        }
         //BuildRandomPlayerInventory();//GetInventory();
         //BuildRandomPlayerEquipments();//GetEquipments();
     }
 
-    //private void GetBaseValue() { }
     //private void GetEquipments() { }
     //void GetInventory() { }
-    
+
     public void Refresh()
     {
         PropertyInfo[] propertys = typeof(Module_PlayerInfo).GetProperties();
         for (int i = 0; i < propertys.Length; i++)
         {
             propertys[i].SetValue(this, propertys[i].GetValue(this));
+        }
+    }
+
+    private void GetPlayerDataFromCSV()
+    {
+        TextAsset t = Resources.Load<TextAsset>("Player");
+        string[] lines = t.ToString().Replace("\r", "").Split('\n');
+        PropertyInfo[] propertys = this.GetType().GetProperties();
+        string[] CSVData = lines[1].Split(',');
+        for (int i = 0; i < propertys.Length; i++)
+        {
+            if (propertys[i].PropertyType == typeof(int))
+            {
+                propertys[i].SetValue(this, int.Parse(CSVData[i]));
+                continue;
+            }
+            if (propertys[i].PropertyType == typeof(string))
+            {
+                propertys[i].SetValue(this, CSVData[i]);
+                continue;
+            }
+            if (propertys[i].PropertyType == typeof(ItemType))
+            {
+                propertys[i].SetValue(this, Enum.Parse(typeof(ItemType), CSVData[i]));
+                continue;
+            }
+        }
+    }
+
+    private void GetItemDataFromCSV()
+    {
+        int[] itemIds = { 1001, 1003, 1002, 1007, 1008, 1009, 1010 };
+        foreach (var i in itemIds)
+        {
+            Inventory.Add(i, new Module_ItemInfo(i));
+        }
+    }
+
+    private void GetEquipDataFromCSV()
+    {
+        int[] itemIds = { 1003, 1004, 1005, 1006 };
+        foreach (var i in itemIds)
+        {
+            Module_ItemInfo module = new Module_ItemInfo(i);
+            Equipments[module.Type] = module;
+        }
+    }
+
+    private void GetQuestsDataFromCSV()
+    {
+        int[] itemIds = { 1004 };
+        foreach (var i in itemIds)
+        {
+            Quests.Add(i, new Module_QuestInfo("PlayerQuest", i));
         }
     }
 }

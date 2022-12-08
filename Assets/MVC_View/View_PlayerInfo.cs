@@ -7,12 +7,20 @@ using UnityEngine.UI;
 
 public class View_PlayerInfo
 {
+    Transform Canvas;
+    public Control_PlayerInfo c;
+
     public List<List<Text>> TexstList;
-    public View_PlayerInfo()
+    public View_PlayerInfo(PlayerType p)
     {
-        BuildTexts();
-        BuildImages();
+        if (p == PlayerType.Player)
+        {
+            BuildTexts();
+            BuildImages();
+        }
     }
+
+
 
     private void BuildTexts()
     {
@@ -25,26 +33,31 @@ public class View_PlayerInfo
             CoinUI ,
             HpUI ,
             MpUI,
-            LifeUI,
-            AtkUI
+            AtkUI,
+            LifeUI
         };
-        string[] tags = { "Name", "Level", "Power", "Exp", "Diamond", "Coin", "HP", "MP", "Life", "Atk" };
+        string[] tags = { "PlayerNameUI", "PlayerLevelUI", "PlayerPowerUI", "PlayerExpUI", "PlayerDiamondUI", "PlayerCoinUI", "PlayerHpUI", "PlayerMpUI", "PlayerAtkUI", "PlayerLifeUI" };
+        Canvas = GameObject.Find("Canvas").transform;
+        List<Transform> tmp = new List<Transform>();
         for (int i = 0; i < tags.Length; i++)
         {
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag(tags[i]))
+            MyUtil.FindAllInChildren(tmp, Canvas, tags[i]);
+
+            foreach (var j in tmp)
             {
-                TexstList[i].Add(go.GetComponent<Text>());
+                TexstList[i].Add(j.GetComponent<Text>());
             }
+            tmp.Clear();
         }
     }
     private void BuildImages()
     {
-        ExpBarUI.Add(GameObject.Find("Exp/Bar").GetComponent<Image>());
-        HpBarUI.Add(GameObject.Find("BaseInfo/HP/Bar").GetComponent<Image>());
-        MpBarUI.Add(GameObject.Find("BaseInfo/MP/Bar").GetComponent<Image>());
+        ExpBarUI.Add(GameObject.Find("PlayerExpBarUI").GetComponent<Image>());
+        HpBarUI.Add(GameObject.Find("PlayerHpBarUI").GetComponent<Image>());
+        MpBarUI.Add(GameObject.Find("PlayerMpBarUI").GetComponent<Image>());
     }
 
-    private List<Text> NameUI = new List<Text>();
+    public List<Text> NameUI = new List<Text>();
     public void NameUIAction(object sender, string arg)
     {
         foreach (var i in NameUI)
@@ -53,7 +66,7 @@ public class View_PlayerInfo
         }
     }
 
-    private List<Image> ProfileUI = new List<Image>();
+    public List<Image> ProfileUI = new List<Image>();
     public void ProfileUIAction(object sender, string arg)
     {
         foreach (var i in ProfileUI)
@@ -62,7 +75,7 @@ public class View_PlayerInfo
         }
     }
 
-    private List<Text> LevelUI = new List<Text>();
+    public List<Text> LevelUI = new List<Text>();
     public void LevelUIAction(object sender, int arg)
     {
         foreach (var i in LevelUI)
@@ -80,8 +93,8 @@ public class View_PlayerInfo
         }
     }
 
-    private List<Text> ExpUI = new List<Text>();
-    private List<Image> ExpBarUI = new List<Image>();
+    public List<Text> ExpUI = new List<Text>();
+    public List<Image> ExpBarUI = new List<Image>();
     public void ExpUIAction(object sender, int arg)
     {
 
@@ -95,7 +108,7 @@ public class View_PlayerInfo
         }
     }
 
-    private List<Text> DiamondUI = new List<Text>();
+    public List<Text> DiamondUI = new List<Text>();
     public void DiamondUIAction(object sender, int arg)
     {
         foreach (var i in DiamondUI)
@@ -104,7 +117,7 @@ public class View_PlayerInfo
         }
     }
 
-    private List<Text> CoinUI = new List<Text>();
+    public List<Text> CoinUI = new List<Text>();
     public void CoinUIAction(object sender, int arg)
     {
         foreach (var i in CoinUI)
@@ -113,8 +126,8 @@ public class View_PlayerInfo
         }
     }
 
-    private List<Text> HpUI = new List<Text>();
-    private List<Image> HpBarUI = new List<Image>();
+    public List<Text> HpUI = new List<Text>();
+    public List<Image> HpBarUI = new List<Image>();
     public void HpUIAction(object sender, int arg)
     {
         foreach (var i in HpUI)
@@ -127,8 +140,8 @@ public class View_PlayerInfo
         }
     }
 
-    private List<Text> MpUI = new List<Text>();
-    private List<Image> MpBarUI = new List<Image>();
+    public List<Text> MpUI = new List<Text>();
+    public List<Image> MpBarUI = new List<Image>();
     public void MpUIAction(object sender, int arg)
     {
         foreach (var i in MpUI)
@@ -141,7 +154,7 @@ public class View_PlayerInfo
         }
     }
 
-    private List<Text> LifeUI = new List<Text>();
+    public List<Text> LifeUI = new List<Text>();
     public void LifeUIAction(object sender, int arg)
     {
         foreach (var i in LifeUI)
@@ -151,7 +164,7 @@ public class View_PlayerInfo
 
     }
 
-    private List<Text> AtkUI = new List<Text>();
+    public List<Text> AtkUI = new List<Text>();
     public void AtkUIAction(object sender, int arg)
     {
         foreach (var i in AtkUI)
@@ -160,4 +173,11 @@ public class View_PlayerInfo
         }
 
     }
+}
+
+public enum PlayerType
+{
+    Player,
+    NPC,
+    Other
 }

@@ -11,9 +11,9 @@ public class PanelManagerInVillage : MonoBehaviour
 
     public static PanelManagerInVillage Instance;
     public Dictionary<string, CustomPanel> Panels = new Dictionary<string, CustomPanel>();
-    public SlotManager PlayerInventory;
-    public SlotManager PlayerEquipmnent;
-    public SlotManager PlayerQuest;
+    //public SlotManager PlayerInventory;
+    //public SlotManager PlayerEquipmnent;
+    //public SlotManager PlayerQuest;
     public SlotManager PlayerSkill;
 
     public Text HPTimer;
@@ -48,23 +48,17 @@ public class PanelManagerInVillage : MonoBehaviour
         Panels.Add(NameMap.PanelMenu, new CustomPanel(this.transform.Find(NameMap.PanelMenu).gameObject));
         Panels.Add(NameMap.PanelQuest, new CustomPanel(this.transform.Find(NameMap.PanelQuest).gameObject));
         Panels.Add(NameMap.PanelSkill, new CustomPanel(this.transform.Find(NameMap.PanelSkill).gameObject));
+        Panels.Add(NameMap.PanelInteractive, new CustomPanel(this.transform.Find(NameMap.PanelInteractive).gameObject));
+        Panels.Add(NameMap.PanelNPCQuest, new CustomPanel(this.transform.Find(NameMap.PanelNPCQuest).gameObject));
 
-        PlayerInventory = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelInventory").transform, "Slots").gameObject, SlotType.Inventory);
-        PlayerEquipmnent = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelEquipmnemt").transform, "Equips").gameObject, SlotType.Equipment);
-        PlayerQuest = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelQuest").transform, "Slots").gameObject, SlotType.Quest);
+        //PlayerInventory = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelInventory").transform, "Slots").gameObject, SlotType.Inventory);
+        //PlayerEquipmnent = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelEquipmnemt").transform, "Equips").gameObject, SlotType.Equipment);
+        //PlayerQuest = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelQuest").transform, "Slots").gameObject, SlotType.Quest);
         PlayerSkill = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelSkill").transform, "Slots").gameObject, SlotType.Skill);
     }
 
     void Start()
     {
-        Module_PlayerInfo m = new Module_PlayerInfo();
-        View_PlayerInfo v = new View_PlayerInfo();
-        Control_PlayerInfo c = new Control_PlayerInfo(m, v);
-
-        GameManagerInVillage.Player = c;
-        QuestInfo q = new QuestInfo();
-        SkillInfo s = new SkillInfo();
-
         Panels[NameMap.PanelCharacterInfo].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelNotification].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelEquipmnemt].GameObjectPanel.SetActive(false);
@@ -74,6 +68,8 @@ public class PanelManagerInVillage : MonoBehaviour
         Panels[NameMap.PanelMenu].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelQuest].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelSkill].GameObjectPanel.SetActive(false);
+        Panels[NameMap.PanelInteractive].GameObjectPanel.SetActive(false);
+        Panels[NameMap.PanelNPCQuest].GameObjectPanel.SetActive(false);
     }
 
     private void SetPanel(string panelName, PanelAction a)
@@ -82,10 +78,18 @@ public class PanelManagerInVillage : MonoBehaviour
         switch (a)
         {
             case PanelAction.Disable:
-                Panels[panelName].animation.Play(Panels[panelName].list[0].name);
+                if (Panels[panelName].isOpen == true)
+                {
+                    Panels[panelName].animation.Play(Panels[panelName].list[0].name);
+                    Panels[panelName].isOpen = false;
+                }
                 break;
             case PanelAction.Enable:
-                Panels[panelName].animation.Play(Panels[panelName].list[1].name);
+                if (Panels[panelName].isOpen == false)
+                {
+                    Panels[panelName].animation.Play(Panels[panelName].list[1].name);
+                    Panels[panelName].isOpen = true;
+                }
                 break;
             default:
                 break;
@@ -96,7 +100,6 @@ public class PanelManagerInVillage : MonoBehaviour
         if (from != null)
         {
             SetPanel(from, PanelAction.Disable);
-
             StartCoroutine(CR_WaitOneSecond(() =>
             {
                 if (a != null) a();

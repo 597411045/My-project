@@ -10,11 +10,16 @@ public class Control_PlayerInfo
     public Module_PlayerInfo module;
     public View_PlayerInfo view;
 
-    public Control_PlayerInfo(Module_PlayerInfo player,View_PlayerInfo view)
+    public SlotManager PlayerInventory;
+    public SlotManager PlayerEquipmnent;
+    public SlotManager PlayerQuest;
+
+    public Control_PlayerInfo(Module_PlayerInfo player, View_PlayerInfo view, PlayerType p)
     {
         this.module = player;
         this.module.c = this;
         this.view = view;
+        this.view.c = this;
 
         player.NameHandler += view.NameUIAction;
         player.ProfileHandler += view.ProfileUIAction;
@@ -27,10 +32,20 @@ public class Control_PlayerInfo
         player.MpHandler += view.MpUIAction;
         player.LifeHandler += view.LifeUIAction;
         player.AtkHandler += view.AtkUIAction;
-
-        BuildRandomPlayerInventory();
-        BuildPlayerSkill();
         module.Refresh();
+
+        if (p == PlayerType.Player)
+        {
+            PlayerInventory = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelInventory").transform, "Slots").gameObject, SlotType.Inventory);
+            AddPlayerItemToSlotManager();
+
+            PlayerEquipmnent = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelEquipmnemt").transform, "Equips").gameObject, SlotType.Equipment);
+            AddPlayerEquipToSlotManager();
+
+            PlayerQuest = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelQuest").transform, "Slots").gameObject, SlotType.Quest);
+            AddPlayerQuestToSlotManager();
+            BuildPlayerSkill();
+        }
     }
 
     bool ifExchange = false;
@@ -59,7 +74,7 @@ public class Control_PlayerInfo
                 RegisterDynamicValueChange(view.PowerUI, module.Power, module.Life + module.Atk, 3);
             }
             module.Power = module.Life + module.Atk;
-            PanelManagerInVillage.Instance.PlayerEquipmnent.TryGetObjectFrom(item, PanelManagerInVillage.Instance.PlayerInventory);
+            PlayerEquipmnent.TryGetObjectFrom(item, PlayerInventory);
 
             ifExchange = false;
             return true;
@@ -81,7 +96,7 @@ public class Control_PlayerInfo
                     RegisterDynamicValueChange(view.PowerUI, module.Power, module.Life + module.Atk, 3);
                 }
                 module.Power = module.Life + module.Atk;
-                PanelManagerInVillage.Instance.PlayerInventory.TryGetObjectFrom(module.Equipments[type], PanelManagerInVillage.Instance.PlayerEquipmnent);
+                PlayerInventory.TryGetObjectFrom(module.Equipments[type], PlayerEquipmnent);
                 module.Equipments[type] = null;
                 return true;
             }
@@ -94,7 +109,7 @@ public class Control_PlayerInfo
         Keyframe k1 = new Keyframe(0, from, 0, (to - from) / time, 0.3f, 0.3f);
         Keyframe k2 = new Keyframe(time, to, (to - from) / time, 0, 0.3f, 0.3f);
         AnimationCurve ac = new AnimationCurve(k1, k2);
-        GameManagerInVillage.Instance.timers.Add(new CustomTimer(texts, 0, time, ac));
+        GameManagerInVillage.timers.Add(new DynamicValue(texts, time, ac));
     }
 
     public bool TryPickItem(Module_ItemInfo item)
@@ -115,9 +130,10 @@ public class Control_PlayerInfo
         {
             //Inventory.Add(item.specialId, item);
         }
-        PanelManagerInVillage.Instance.PlayerInventory.TryAddObject(item);
+        PlayerInventory.TryAddItem(item);
         return true;
     }
+
     public bool TryDropItem(Module_ItemInfo item, SlotManager toSlotManager)
     {
         if (module.Inventory.ContainsKey(item.Id))
@@ -128,19 +144,32 @@ public class Control_PlayerInfo
                 module.Inventory.Remove(item.Id);
             }
         }
-        PanelManagerInVillage.Instance.PlayerInventory.RemoveRecord(item);
+        PlayerInventory.RemoveRecord(item);
         return true;
     }
 
-    private void BuildRandomPlayerInventory()
+    private void AddPlayerItemToSlotManager()
     {
-        for (int i = 0; i < 9; i++)
+        foreach (var i in module.Inventory)
         {
-            Module_ItemInfo item = Control_ItemInfo.GetRandomItem();
-
-            TryPickItem(item);
+            PlayerInventory.TryAddItem(i.Value);
         }
+    }
 
+    private void AddPlayerEquipToSlotManager()
+    {
+        foreach (var i in module.Equipments)
+        {
+            if (i.Value != null) PlayerEquipmnent.TryAddItem(i.Value);
+        }
+    }
+
+    private void AddPlayerQuestToSlotManager()
+    {
+        foreach (var i in module.Quests)
+        {
+            if (i.Value != null) PlayerQuest.TryAddQuest(i.Value);
+        }
     }
     private void BuildPlayerSkill()
     {
@@ -150,30 +179,7 @@ public class Control_PlayerInfo
             PanelManagerInVillage.Instance.PlayerSkill.TryAddSkill(module.Skill[SkillInfo.BaseItemList[i].Id]);
         }
     }
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 public class PlayerArgs : EventArgs
 {
@@ -181,3 +187,48 @@ public class PlayerArgs : EventArgs
     public int Level;
 }
 
+public class BaseUpdateAction
+{
+    protected bool isStoped;
+    protected float f;
+    float deadline;
+    public Action action;
+
+    public BaseUpdateAction(float deadline)
+    {
+        this.deadline = deadline;
+        action += () =>
+        {
+            if (this.f >= deadline)
+            {
+                GameManagerInVillage.LaterAction += () => { GameManagerInVillage.timers.Remove(this); };
+                isStoped = true;
+            }
+        };
+    }
+}
+
+public class DynamicValue : BaseUpdateAction
+{
+    List<Text> t;
+    AnimationCurve c;
+
+    public DynamicValue(List<Text> t, float deadline, AnimationCurve c) : base(deadline)
+    {
+        this.t = t;
+        this.c = c;
+        action += doAction;
+    }
+
+    public void doAction()
+    {
+        if (isStoped == false)
+        {
+            f += Time.deltaTime;
+            foreach (var item in t)
+            {
+                item.text = c.Evaluate(f).ToString();
+            }
+        }
+    }
+}

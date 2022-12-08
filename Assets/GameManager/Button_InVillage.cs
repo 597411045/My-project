@@ -93,7 +93,7 @@ public class Button_InVillage : MonoBehaviour
 
     public void OnOKInPanelNotification()
     {
-        GameManagerInVillage.Player.module.Name = PanelManagerInVillage.Instance.NotificationInput.text;
+        GameManagerInVillage.PlayerControl.module.Name = PanelManagerInVillage.Instance.NotificationInput.text;
         PanelManagerInVillage.Instance.ChangePanel(NameMap.PanelNotification, null);
     }
 
@@ -123,7 +123,7 @@ public class Button_InVillage : MonoBehaviour
 
     public void OnAddCoin()
     {
-        GameManagerInVillage.Player.module.Coin += 50;
+        GameManagerInVillage.PlayerControl.module.Coin += 50;
     }
 
     public void OnSkillUpgrade()

@@ -18,19 +18,28 @@ public class Control_ItemInfo
         this.view.c = this;
 
         item.IdHandler += view.IdUIAction;
-        item.CountHandler += view.CountUIAction;
+        item.NameHandler += view.NameUIAction;
         item.ProfileHandler += view.ProfileUIAction;
+        item.TypeHandler += view.TypeUIAction;
+        item.ExpHandler += view.ExpUIAction;
+        item.LevelHandler += view.LevelUIAction;
+        item.QualityHandler += view.QualityUIAction;
+        item.PowerHandler += view.PowerUIAction;
+        item.PriceHandler += view.PriceUIAction;
+        item.AtkHandler += view.AtkUIAction;
+        item.LifeHandler += view.LifeUIAction;
+        item.CountHandler += view.CountUIAction;
         item.DescriptionHandler += view.DescriptionUIAction;
         module.Refresh();
     }
 
-    public static Module_ItemInfo GetRandomItem()
-    {
-        Module_ItemInfo item = Module_ItemInfo.BaseItemList[UnityEngine.Random.Range(0, Module_ItemInfo.BaseItemList.Count - 1)].Clone();
-        item.Atk = UnityEngine.Random.Range(1, 10);
-        item.Life = UnityEngine.Random.Range(1, 10);
-        item.Power = item.Atk + item.Life;
-        item.Count = 1;
-        return item;
-    }
+    //public static Module_ItemInfo GetRandomItem()
+    //{
+    //    Module_ItemInfo item = Module_ItemInfo.BaseItemList[UnityEngine.Random.Range(0, Module_ItemInfo.BaseItemList.Count - 1)].Clone();
+    //    item.Atk = UnityEngine.Random.Range(1, 10);
+    //    item.Life = UnityEngine.Random.Range(1, 10);
+    //    item.Power = item.Atk + item.Life;
+    //    item.Count = 1;
+    //    return item;
+    //}
 }

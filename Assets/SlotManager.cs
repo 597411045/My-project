@@ -51,7 +51,7 @@ public class SlotManager
         return false;
     }
 
-    public void TryAddObject(Module_ItemInfo i)
+    public void TryAddItem(Module_ItemInfo i)
     {
         if (GetAvaliableSlot(out avaliableSlot, i.Type))
         {
@@ -59,34 +59,40 @@ public class SlotManager
             View_ItemInfo v = go.AddComponent<View_ItemInfo>();
             Control_ItemInfo c = new Control_ItemInfo(i, v);
             v.slotType = this.slotType;
-
-            SlotList[SlotList.IndexOf(avaliableSlot)].controller = c;
+            c.module.Refresh();
+            SlotList[SlotList.IndexOf(avaliableSlot)].ic = c;
         }
     }
 
-    public void TryAddQuest(QuestInfo i)
+    public void TryAddQuest(Module_QuestInfo i)
     {
         GameObject go = GameManagerInVillage.Instance.CustomInstantiate(Resources.Load<GameObject>("Quest"), SlotGrouper.transform);
-        MyUtil.FindOneInChildren(go.transform, "QuestTypeImage").gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(i.Profile);
-        MyUtil.FindOneInChildren(go.transform, "QuestImage").gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(i.Profile);
-        MyUtil.FindOneInChildren(go.transform, "QuestName").gameObject.GetComponent<Text>().text = i.Name;
-        MyUtil.FindOneInChildren(go.transform, "QuestDescription").gameObject.GetComponent<Text>().text = i.Description;
-        i.StatusUI = MyUtil.FindOneInChildren(go.transform, "StatusValue").gameObject.GetComponent<Text>();
-        i.SetStatus(QuestInfo.Accept);
-        i.NPCPosition = GameObject.Find("NPC_Example").transform.position;
-        MyUtil.FindOneInChildren(go.transform, "Status").GetComponent<Button>().onClick.AddListener(() =>
-        {
-            i.SetStatus(QuestInfo.Abandon);
-            GameObject.Find("Ch36_nonPBR").GetComponent<PlayMoveScript>().isAutoNav = true;
-            GameObject.Find("Ch36_nonPBR").GetComponent<PlayMoveScript>().navMeshAgent.SetDestination(i.NPCPosition);
-        });
+        View_QuestInfo v = go.AddComponent<View_QuestInfo>();
+        Control_QuestInfo c = new Control_QuestInfo(i, v);
+        v.slotType = this.slotType;
+        c.module.Refresh();
+        //SlotList[SlotList.IndexOf(avaliableSlot)].qc = c;
+
+        //MyUtil.FindOneInChildren(go.transform, "QuestTypeImage").gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(i.Profile);
+        //MyUtil.FindOneInChildren(go.transform, "QuestImage").gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(i.Profile);
+        //MyUtil.FindOneInChildren(go.transform, "QuestName").gameObject.GetComponent<Text>().text = i.Name;
+        //MyUtil.FindOneInChildren(go.transform, "QuestDescription").gameObject.GetComponent<Text>().text = i.Description;
+        //i.StatusUI = MyUtil.FindOneInChildren(go.transform, "StatusValue").gameObject.GetComponent<Text>();
+        //i.SetStatus(Module_QuestInfo.Accept);
+        //i.NPCPosition = GameObject.Find("NPC_Example").transform.position;
+        //MyUtil.FindOneInChildren(go.transform, "Status").GetComponent<Button>().onClick.AddListener(() =>
+        //{
+        //    i.SetStatus(Module_QuestInfo.Abandon);
+        //    GameObject.Find("Ch36_nonPBR").GetComponent<PlayMoveScript>().isAutoNav = true;
+        //    GameObject.Find("Ch36_nonPBR").GetComponent<PlayMoveScript>().navMeshAgent.SetDestination(i.NPCPosition);
+        //});
     }
 
     public void TryAddSkill(SkillInfo i)
     {
         GameObject go = GameManagerInVillage.Instance.CustomInstantiate(Resources.Load<GameObject>("Skill"), SlotGrouper.transform);
         go.GetComponent<SkillDragScript>().profile = go.GetComponentInChildren<Image>();
-        go.GetComponent<SkillDragScript>().name = MyUtil.FindOneInChildren(PanelManagerInVillage.Instance.Panels[NameMap.PanelSkill].GameObjectPanel.transform, "SkillName").GetComponent<Text>();
+        go.GetComponent<SkillDragScript>().name = MyUtil.FindOneInChildren(PanelManagerInVillage.Instance.Panels[NameMap.PanelSkill].GameObjectPanel.transform, "SkillNameUI").GetComponent<Text>();
         go.GetComponent<SkillDragScript>().description = MyUtil.FindOneInChildren(PanelManagerInVillage.Instance.Panels[NameMap.PanelSkill].GameObjectPanel.transform, "SkillDescription").GetComponent<Text>();
         go.GetComponent<SkillDragScript>().hintText = MyUtil.FindOneInChildren(PanelManagerInVillage.Instance.Panels[NameMap.PanelSkill].GameObjectPanel.transform, "HintText").GetComponent<Text>();
         go.GetComponent<SkillDragScript>().UpgradeButton = MyUtil.FindOneInChildren(PanelManagerInVillage.Instance.Panels[NameMap.PanelSkill].GameObjectPanel.transform, "Button_SkillUpgrade").GetComponent<Button>(); ;
@@ -97,7 +103,7 @@ public class SlotManager
     {
         Slot OldSlot = SlotList.Find((slot) =>
         {
-            if (slot.controller.module.GetHashCode() == i.GetHashCode())
+            if (slot.ic.module.GetHashCode() == i.GetHashCode())
             {
                 return true;
             }
@@ -107,7 +113,7 @@ public class SlotManager
             }
         });
         //GameObject.Destroy(OldSlot.controller.view.gameObject);
-        OldSlot.controller = null;
+        OldSlot.ic = null;
     }
     private bool GetAvaliableSlot(out Slot s, ItemType itemType)
     {
@@ -143,7 +149,8 @@ public class Slot
 {
     public ItemType itemType;
     public GameObject SlotObject;
-    public Control_ItemInfo controller;
+    public Control_ItemInfo ic;
+    public Control_QuestInfo qc;
 }
 
 public enum SlotType

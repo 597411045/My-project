@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class Module_ItemInfo
 {
-    public static List<Module_ItemInfo> BaseItemList = new List<Module_ItemInfo>();
+    //public static List<Module_ItemInfo> BaseItemList = new List<Module_ItemInfo>();
     //public SlotType slotType;
 
     private int _id;
@@ -17,14 +17,14 @@ public class Module_ItemInfo
     private string _profile;
     private ItemType _type;
 
-    private int _exp = 0;
-    private int _level = 1;
-    private int _quality = 1;
-    private int _power = 0;
+    private int _exp;
+    private int _level;
+    private int _quality;
+    private int _power;
 
-    private int _price = 0;
-    private int _atk = 0;
-    private int _life = 0;
+    private int _price;
+    private int _atk;
+    private int _life;
 
     private int _count;
     private string _description;
@@ -189,49 +189,50 @@ public class Module_ItemInfo
         }
     }
 
-    static Module_ItemInfo()
+    public Module_ItemInfo(int id)
     {
-        GetBaseListFromCSV();
+        GetDataFromCSV(id);
     }
-    private static void GetBaseListFromCSV()
+    private void GetDataFromCSV(int id)
     {
         TextAsset t = Resources.Load<TextAsset>("Inventory");
         string[] lines = t.ToString().Replace("\r", "").Split('\n');
 
-        Module_ItemInfo itemInfo;
+        //Module_ItemInfo itemInfo;
         //PropertyInfo[] propertys = itemInfo.GetType().GetProperties();
         PropertyInfo[] propertys = typeof(Module_ItemInfo).GetProperties();
 
         for (int j = 1; j < lines.Length; j++)
         {
-            string[] propertyCSV = lines[j].Split(',');
-            itemInfo = new Module_ItemInfo();
+            string[] CSVData = lines[j].Split(',');
+            if (int.Parse(CSVData[0]) != id) continue;
+            //itemInfo = new Module_ItemInfo();
 
             for (int i = 0; i < propertys.Length; i++)
             {
                 if (propertys[i].PropertyType == typeof(int))
                 {
-                    propertys[i].SetValue(itemInfo, int.Parse(propertyCSV[i]));
+                    propertys[i].SetValue(this, int.Parse(CSVData[i]));
                     continue;
                 }
                 if (propertys[i].PropertyType == typeof(string))
                 {
-                    propertys[i].SetValue(itemInfo, propertyCSV[i]);
+                    propertys[i].SetValue(this, CSVData[i]);
                     continue;
                 }
                 if (propertys[i].PropertyType == typeof(ItemType))
                 {
-                    propertys[i].SetValue(itemInfo, Enum.Parse(typeof(ItemType), propertyCSV[i]));
+                    propertys[i].SetValue(this, Enum.Parse(typeof(ItemType), CSVData[i]));
                     continue;
                 }
             }
-            BaseItemList.Add(itemInfo);
+            //BaseItemList.Add(itemInfo);
         }
     }
 
-    public Module_ItemInfo Clone()
+    public Module_ItemInfo Clone(int id)
     {
-        Module_ItemInfo item = new Module_ItemInfo();
+        Module_ItemInfo item = new Module_ItemInfo(id);
         PropertyInfo[] propertys = item.GetType().GetProperties();
         for (int i = 0; i < propertys.Length; i++)
         {

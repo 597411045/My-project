@@ -23,6 +23,8 @@ static class NameMap
     public static string PanelMenu = "PanelMenu";
     public static string PanelQuest = "PanelQuest";
     public static string PanelSkill = "PanelSkill";
+    public static string PanelInteractive = "PanelInteractive";
+    public static string PanelNPCQuest = "PanelNPCQuest";
 
     public static string PanelFade = "PanelFade";
     public static string PanelShow = "PanelShow";
@@ -38,58 +40,7 @@ static class NameMap
     public static string AniTurnRight = "TurnRight";
 }
 
-public class CustomPanel
-{
-    public GameObject GameObjectPanel;
-    public Animation animation;
-    public List<AnimationState> list = new List<AnimationState>();
 
-    private Image ItemImage;
-    private Text ItemName;
-    private Text ItemDescription;
-    private Text ItemLevel;
-    private Text ItemATK;
-    private Text ItemLife;
-    private Text ItemPower;
-
-    private Module_ItemInfo item;
-
-    public Module_ItemInfo Item
-    {
-        get => item;
-        set
-        {
-            item = value;
-            if (ItemImage != null) ItemImage.sprite = Resources.Load<Sprite>(item.Profile);
-            if (ItemName != null) ItemName.text = item.Name;
-            if (ItemDescription != null) ItemDescription.text = item.Description;
-            if (ItemLevel != null) ItemLevel.text = item.Level.ToString();
-            if (ItemATK != null) ItemATK.text = item.Atk.ToString();
-            if (ItemLife != null) ItemLife.text = item.Life.ToString();
-            if (ItemPower != null) ItemPower.text = item.Power.ToString();
-        }
-    }
-
-    public CustomPanel(GameObject go)
-    {
-        GameObjectPanel = go;
-        animation = GameObjectPanel.GetComponent<Animation>();
-        if (animation != null)
-        {
-            foreach (AnimationState state in animation)
-            {
-                list.Add(state);
-            }
-        }
-        ItemImage = MyUtil.FindOneInChildren(GameObjectPanel.transform, "ItemImage")?.gameObject.GetComponent<Image>();
-        ItemName = MyUtil.FindOneInChildren(GameObjectPanel.transform, "ItemName")?.gameObject.GetComponent<Text>();
-        ItemDescription = MyUtil.FindOneInChildren(GameObjectPanel.transform, "ItemDescription")?.gameObject.GetComponent<Text>();
-        ItemLevel = MyUtil.FindOneInChildren(GameObjectPanel.transform, "ItemLevel")?.gameObject.GetComponent<Text>();
-        ItemATK = MyUtil.FindOneInChildren(GameObjectPanel.transform, "ItemATK")?.gameObject.GetComponent<Text>();
-        ItemLife = MyUtil.FindOneInChildren(GameObjectPanel.transform, "ItemLife")?.gameObject.GetComponent<Text>();
-        ItemPower = MyUtil.FindOneInChildren(GameObjectPanel.transform, "ItemPower")?.gameObject.GetComponent<Text>();
-    }
-}
 
 public class CustomModel
 {
