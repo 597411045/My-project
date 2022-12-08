@@ -13,7 +13,6 @@ public class Control_QuestInfo
     public Control_QuestInfo(Module_QuestInfo item, View_QuestInfo view)
     {
         this.module = item;
-        this.module.c = this;
         this.view = view;
         this.view.c = this;
 

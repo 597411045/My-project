@@ -17,7 +17,6 @@ public class Control_PlayerInfo
     public Control_PlayerInfo(Module_PlayerInfo player, View_PlayerInfo view, PlayerType p)
     {
         this.module = player;
-        this.module.c = this;
         this.view = view;
         this.view.c = this;
 
@@ -51,20 +50,20 @@ public class Control_PlayerInfo
     bool ifExchange = false;
     float PowerBeforeUnequip;
 
-    public bool TryEquipItem(Module_ItemInfo item)
+    public bool TryEquipItemFromInventory(Control_ItemInfo itemToBeEquiped)
     {
-        if (module.Equipments.ContainsKey(item.Type))
+        if (module.Equipments.ContainsKey(itemToBeEquiped.module.Type))
         {
-            if (module.Equipments[item.Type] != null)
+            if (module.Equipments[itemToBeEquiped.module.Type] != null)
             {
                 PowerBeforeUnequip = module.Power;
-                TryUnequipItem(item.Type);
+                TryUnequipItemFromEquip(itemToBeEquiped.module.Type);
                 ifExchange = true;
             }
-            module.Equipments[item.Type] = item;
+            module.Equipments[itemToBeEquiped.module.Type] = itemToBeEquiped.module;
 
-            module.Life = module.Life + module.Equipments[item.Type].Life;
-            module.Atk = module.Atk + module.Equipments[item.Type].Atk;
+            module.Life = module.Life + module.Equipments[itemToBeEquiped.module.Type].Life;
+            module.Atk = module.Atk + module.Equipments[itemToBeEquiped.module.Type].Atk;
             if (ifExchange)
             {
                 RegisterDynamicValueChange(view.PowerUI, PowerBeforeUnequip, module.Life + module.Atk, 3);
@@ -74,7 +73,7 @@ public class Control_PlayerInfo
                 RegisterDynamicValueChange(view.PowerUI, module.Power, module.Life + module.Atk, 3);
             }
             module.Power = module.Life + module.Atk;
-            PlayerEquipmnent.TryGetObjectFrom(item, PlayerInventory);
+            PlayerEquipmnent.TryGetItemFrom(module.Equipments[itemToBeEquiped.module.Type], PlayerInventory);
 
             ifExchange = false;
             return true;
@@ -82,22 +81,22 @@ public class Control_PlayerInfo
         return false;
     }
 
-    public bool TryUnequipItem(ItemType type)
+    public bool TryUnequipItemFromEquip(ItemType typeOfItemToBeUnequiped)
     {
-        if (module.Equipments.ContainsKey(type))
+        if (module.Equipments.ContainsKey(typeOfItemToBeUnequiped))
         {
-            if (module.Equipments[type] != null)
+            if (module.Equipments[typeOfItemToBeUnequiped] != null)
             {
-                module.Life = module.Life - module.Equipments[type].Life;
-                module.Atk = module.Atk - module.Equipments[type].Atk;
+                module.Life = module.Life - module.Equipments[typeOfItemToBeUnequiped].Life;
+                module.Atk = module.Atk - module.Equipments[typeOfItemToBeUnequiped].Atk;
 
                 if (ifExchange != true)
                 {
                     RegisterDynamicValueChange(view.PowerUI, module.Power, module.Life + module.Atk, 3);
                 }
                 module.Power = module.Life + module.Atk;
-                PlayerInventory.TryGetObjectFrom(module.Equipments[type], PlayerEquipmnent);
-                module.Equipments[type] = null;
+                PlayerInventory.TryGetItemFrom(module.Equipments[typeOfItemToBeUnequiped], PlayerEquipmnent);
+                module.Equipments[typeOfItemToBeUnequiped] = null;
                 return true;
             }
         }
@@ -134,19 +133,19 @@ public class Control_PlayerInfo
         return true;
     }
 
-    public bool TryDropItem(Module_ItemInfo item, SlotManager toSlotManager)
-    {
-        if (module.Inventory.ContainsKey(item.Id))
-        {
-            module.Inventory[item.Id].Count--;
-            if (module.Inventory[item.Id].Count <= 0)
-            {
-                module.Inventory.Remove(item.Id);
-            }
-        }
-        PlayerInventory.RemoveRecord(item);
-        return true;
-    }
+    //public bool TryDropItem(Module_ItemInfo item, SlotManager toSlotManager)
+    //{
+    //    if (module.Inventory.ContainsKey(item.Id))
+    //    {
+    //        module.Inventory[item.Id].Count--;
+    //        if (module.Inventory[item.Id].Count <= 0)
+    //        {
+    //            module.Inventory.Remove(item.Id);
+    //        }
+    //    }
+    //    //PlayerInventory.RemoveRecord(item);
+    //    return true;
+    //}
 
     private void AddPlayerItemToSlotManager()
     {
@@ -160,7 +159,10 @@ public class Control_PlayerInfo
     {
         foreach (var i in module.Equipments)
         {
-            if (i.Value != null) PlayerEquipmnent.TryAddItem(i.Value);
+            if (i.Value != null)
+            {
+                PlayerEquipmnent.TryAddItem(i.Value);
+            }
         }
     }
 

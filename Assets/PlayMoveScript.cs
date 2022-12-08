@@ -1,15 +1,18 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class PlayMoveScript : MonoBehaviour
 {
-    Animator animator;
+    public Animator animator;
     public NavMeshAgent navMeshAgent;
-    Camera secondCamera;
-    Vector3 BackToPlayer;
+    public Camera secondCamera;
+    public Vector3 BackToPlayer;
     public bool isAutoNav;
+    public CinemachineFreeLook CFL;
+    public NPCScript NearestNPC;
 
     Vector3 moveVector3;
     private void Awake()
@@ -18,6 +21,7 @@ public class PlayMoveScript : MonoBehaviour
         navMeshAgent = this.gameObject.GetComponent<NavMeshAgent>();
         //rigidbody = this.gameObject.GetComponent<Rigidbody>();
         secondCamera = GameObject.Find("SecondCamera").GetComponent<Camera>();
+        CFL = GameObject.Find("CM FreeLook1").GetComponent<CinemachineFreeLook>();
     }
 
     void Start()
@@ -25,7 +29,9 @@ public class PlayMoveScript : MonoBehaviour
         //navMeshAgent.updatePosition = false;
         //navMeshAgent.updateRotation = false;
         GameManagerInVillage.timers.Add(new PlayerMove(animator, navMeshAgent, secondCamera, this.transform));
-        GameManagerInVillage.timers.Add(new PlayerAroundDected(this.transform));
+        GameManagerInVillage.timers.Add(new PlayerAroundDected(this));
+        GameManagerInVillage.timers.Add(new PlayerPressQAroundNPC(this));
+        GameManagerInVillage.timers.Add(new PlayerTriggerCinemachine(CFL));
     }
 
     //void Update()
@@ -143,11 +149,15 @@ public class PlayerMove : BaseUpdateAction
 
 public class PlayerAroundDected : BaseUpdateAction
 {
-    Transform thistransform;
+    PlayMoveScript p;
+    //Transform thistransform;
     Collider[] colliders;
-    public PlayerAroundDected(Transform thistransform) : base(1)
+    //NPCScript NearestNPC;
+    public PlayerAroundDected(PlayMoveScript p) : base(1)
     {
-        this.thistransform = thistransform;
+        this.p = p;
+        //this.thistransform = thistransform;
+        //this.NearestNPC = NearestNPC;
         action += doAction;
     }
 
@@ -158,7 +168,7 @@ public class PlayerAroundDected : BaseUpdateAction
             f += Time.deltaTime;
             if (f > 1)
             {
-                colliders = Physics.OverlapSphere(thistransform.position, 5);
+                colliders = Physics.OverlapSphere(p.transform.position, 5);
                 if (colliders.Length == 0) PanelManagerInVillage.Instance?.ChangePanel(NameMap.PanelInteractive, null);
                 for (int i = 0; i < colliders.Length; i++)
                 {
@@ -166,7 +176,8 @@ public class PlayerAroundDected : BaseUpdateAction
                     {
                         PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelInteractive, () =>
                         {
-                            PanelManagerInVillage.Instance.Panels[NameMap.PanelInteractive].Player = colliders[i].GetComponent<NPCScript>().view;
+                            p.NearestNPC = colliders[i].GetComponent<NPCScript>();
+                            PanelManagerInVillage.Instance.Panels[NameMap.PanelInteractive].Player = p.NearestNPC.view;
                         });
                         break;
                     }
@@ -176,6 +187,78 @@ public class PlayerAroundDected : BaseUpdateAction
                     }
                 }
                 f = 0;
+            }
+        }
+    }
+}
+
+public class PlayerTriggerCinemachine : BaseUpdateAction
+{
+    CinemachineFreeLook CFL;
+    float oldXMAX;
+    float oldYMAX;
+    public PlayerTriggerCinemachine(CinemachineFreeLook CFL) : base(1)
+    {
+        this.CFL = CFL;
+        oldXMAX = CFL.m_XAxis.m_MaxSpeed;
+        oldYMAX = CFL.m_YAxis.m_MaxSpeed;
+        action += doAction;
+    }
+
+    public void doAction()
+    {
+        if (isStoped == false)
+        {
+            f += Time.deltaTime;
+            if (f > 1)
+            {
+                foreach (var i in PanelManagerInVillage.Instance.Panels)
+                {
+                    if ((i.Value.state & (CustomPanelState.ifOpen | CustomPanelState.ifIgnore)) == CustomPanelState.ifOpen)
+                    {
+                        CFL.m_XAxis.m_MaxSpeed = 0;
+                        CFL.m_YAxis.m_MaxSpeed = 0;
+                        break;
+                    }
+                    else
+                    {
+                        if (CFL.m_XAxis.m_MaxSpeed != oldXMAX)
+                            CFL.m_XAxis.m_MaxSpeed = oldXMAX;
+                        if (CFL.m_YAxis.m_MaxSpeed != oldYMAX)
+                            CFL.m_YAxis.m_MaxSpeed = oldYMAX;
+                    }
+                }
+                f = 0;
+            }
+        }
+    }
+}
+
+public class PlayerPressQAroundNPC : BaseUpdateAction
+{
+    PlayMoveScript p;
+    //Transform thistransform;
+    //NPCScript NearestNPC;
+    public PlayerPressQAroundNPC(PlayMoveScript p) : base(1)
+    {
+        this.p = p;
+        action += doAction;
+    }
+
+    public void doAction()
+    {
+        if (isStoped == false)
+        {
+            if ((PanelManagerInVillage.Instance.Panels[NameMap.PanelInteractive].state & CustomPanelState.ifOpen) == CustomPanelState.ifOpen
+                && Input.GetKeyDown(KeyCode.Q))
+            {
+                foreach (var i in p.NearestNPC.module.Quests)
+                {
+                    NPCScript.NPCQuestUI.Clear();
+                    NPCScript.NPCQuestUI.TryAddQuest(i.Value);
+                }
+
+                PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelNPCQuest);
             }
         }
     }

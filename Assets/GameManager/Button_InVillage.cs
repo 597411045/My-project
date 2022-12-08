@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class Button_InVillage : MonoBehaviour
 {
+    public static Button_InVillage Instance;
+
     List<Transform> Button_Close;
     List<Transform> Button_Menu;
     List<Button> Button_Task;
@@ -19,6 +21,7 @@ public class Button_InVillage : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         Canvas = GameObject.Find("Canvas").transform;
         BuildButtonClose();
         BuildButtonMenu();
@@ -131,6 +134,19 @@ public class Button_InVillage : MonoBehaviour
         SkillDragScript.SelectedSkill.Upgrade();
     }
 
+    public void OnQuestButtonClick(Module_QuestInfo m)
+    {
+        if (m.Status == QuestStatus.New)
+        {
+            GameManagerInVillage.PlayerControl.module.Quests.Add(m.Id, m);
+
+            m.Status = QuestStatus.Doing;
+            m.Refresh();
+
+            GameManagerInVillage.PlayerControl.PlayerQuest.TryAcceptQuestFrom(m, NPCScript.NPCQuestUI);
+        }
+
+    }
 
 }
 

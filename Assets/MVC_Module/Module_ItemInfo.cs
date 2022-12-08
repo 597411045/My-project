@@ -29,7 +29,7 @@ public class Module_ItemInfo
     private int _count;
     private string _description;
 
-    public Control_ItemInfo c;
+    
 
     public EventHandler<int> IdHandler;
     public int Id

@@ -118,7 +118,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             if (slotType == SlotType.Equipment)
             {
-                GameManagerInVillage.PlayerControl.TryUnequipItem(c.module.Type);
+                GameManagerInVillage.PlayerControl.TryUnequipItemFromEquip(c.module.Type);
                 Release();
             }
             else
@@ -130,7 +130,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (eventData.pointerEnter.tag == ("Equipment") && c.module.Type != ItemType.Consume)
         {
-            GameManagerInVillage.PlayerControl.TryEquipItem(c.module);
+            GameManagerInVillage.PlayerControl.TryEquipItemFromInventory(c);
             Release();
             return;
         }
@@ -178,7 +178,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             //PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelMenu, Camera.main.ScreenToWorldPoint(eventData.position) + Camera.main.transform.forward * 10);
             if (slotType == SlotType.Equipment)
             {
-                GameManagerInVillage.PlayerControl.TryUnequipItem(c.module.Type);
+                GameManagerInVillage.PlayerControl.TryUnequipItemFromEquip(c.module.Type);
                 return;
             }
             if (slotType == SlotType.Inventory)
@@ -189,7 +189,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 }
                 else
                 {
-                    GameManagerInVillage.PlayerControl.TryEquipItem(c.module);
+                    GameManagerInVillage.PlayerControl.TryEquipItemFromInventory(c);
                 }
                 return;
             }

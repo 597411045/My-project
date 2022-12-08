@@ -48,7 +48,7 @@ public class PanelManagerInVillage : MonoBehaviour
         Panels.Add(NameMap.PanelMenu, new CustomPanel(this.transform.Find(NameMap.PanelMenu).gameObject));
         Panels.Add(NameMap.PanelQuest, new CustomPanel(this.transform.Find(NameMap.PanelQuest).gameObject));
         Panels.Add(NameMap.PanelSkill, new CustomPanel(this.transform.Find(NameMap.PanelSkill).gameObject));
-        Panels.Add(NameMap.PanelInteractive, new CustomPanel(this.transform.Find(NameMap.PanelInteractive).gameObject));
+        Panels.Add(NameMap.PanelInteractive, new CustomPanel(this.transform.Find(NameMap.PanelInteractive).gameObject, CustomPanelState.ifIgnore));
         Panels.Add(NameMap.PanelNPCQuest, new CustomPanel(this.transform.Find(NameMap.PanelNPCQuest).gameObject));
 
         //PlayerInventory = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelInventory").transform, "Slots").gameObject, SlotType.Inventory);
@@ -78,17 +78,17 @@ public class PanelManagerInVillage : MonoBehaviour
         switch (a)
         {
             case PanelAction.Disable:
-                if (Panels[panelName].isOpen == true)
+                if ((Panels[panelName].state & CustomPanelState.ifOpen) == CustomPanelState.ifOpen)
                 {
                     Panels[panelName].animation.Play(Panels[panelName].list[0].name);
-                    Panels[panelName].isOpen = false;
+                    Panels[panelName].state ^= CustomPanelState.ifOpen;
                 }
                 break;
             case PanelAction.Enable:
-                if (Panels[panelName].isOpen == false)
+                if ((Panels[panelName].state & CustomPanelState.ifOpen) == 0)
                 {
                     Panels[panelName].animation.Play(Panels[panelName].list[1].name);
-                    Panels[panelName].isOpen = true;
+                    Panels[panelName].state ^= CustomPanelState.ifOpen;
                 }
                 break;
             default:

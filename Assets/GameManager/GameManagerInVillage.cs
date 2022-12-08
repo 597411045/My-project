@@ -90,9 +90,17 @@ public class GameManagerInVillage : MonoBehaviour
         ifAutoIncreased = true;
     }
 
-    public GameObject CustomInstantiate(GameObject go, Transform parent)
+    public GameObject CustomInstantiate(GameObject go, Transform parent = null)
     {
-        GameObject g = Instantiate(go, parent);
+        GameObject g;
+        if (parent == null)
+        {
+            g = Instantiate(go);
+        }
+        else
+        {
+            g = Instantiate(go, parent);
+        }
         return g;
     }
 

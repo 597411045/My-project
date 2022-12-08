@@ -13,7 +13,6 @@ public class Module_PlayerInfo
     public static string LocalPassword;
     public static int CharacterId = 0;
     public static string CurrentCharacterName = "Default";
-    public Control_PlayerInfo c;
 
     private string _name;
     private string _profile;
@@ -262,7 +261,7 @@ public class Module_PlayerInfo
 
     private void GetItemDataFromCSV()
     {
-        int[] itemIds = { 1001, 1003, 1002, 1007, 1008, 1009, 1010 };
+        int[] itemIds = { 1001, 1002, 1007, 1008, 1009, 1010, 1011 };
         foreach (var i in itemIds)
         {
             Inventory.Add(i, new Module_ItemInfo(i));
@@ -276,6 +275,10 @@ public class Module_PlayerInfo
         {
             Module_ItemInfo module = new Module_ItemInfo(i);
             Equipments[module.Type] = module;
+
+            this.Life = this.Life + module.Life;
+            this.Atk = this.Atk + module.Atk;
+            this.Power = this.Life + module.Atk;
         }
     }
 

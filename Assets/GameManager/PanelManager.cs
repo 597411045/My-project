@@ -31,12 +31,12 @@ public class PanelManager : MonoBehaviour
             Destroy(this);
         }
 
-        aniPanels.Add(NameMap.PanelLogin, new CustomPanel(this.transform.Find(NameMap.PanelLogin).gameObject));
-        aniPanels.Add(NameMap.PanelRegister, new CustomPanel(this.transform.Find(NameMap.PanelRegister).gameObject));
-        aniPanels.Add(NameMap.PanelStart, new CustomPanel(this.transform.Find(NameMap.PanelStart).gameObject));
-        aniPanels.Add(NameMap.PanelServerList, new CustomPanel(this.transform.Find(NameMap.PanelServerList).gameObject));
-        aniPanels.Add(NameMap.PanelCharacter, new CustomPanel(this.transform.Find(NameMap.PanelCharacter).gameObject));
-        aniPanels.Add(NameMap.PanelSelectCharacter, new CustomPanel(this.transform.Find(NameMap.PanelSelectCharacter).gameObject));
+        aniPanels.Add(NameMap.PanelLogin, new CustomPanel(this.transform.Find(NameMap.PanelLogin).gameObject,CustomPanelState.ifOpen));
+        aniPanels.Add(NameMap.PanelRegister, new CustomPanel(this.transform.Find(NameMap.PanelRegister).gameObject, CustomPanelState.ifOpen));
+        aniPanels.Add(NameMap.PanelStart, new CustomPanel(this.transform.Find(NameMap.PanelStart).gameObject, CustomPanelState.ifOpen));
+        aniPanels.Add(NameMap.PanelServerList, new CustomPanel(this.transform.Find(NameMap.PanelServerList).gameObject, CustomPanelState.ifOpen));
+        aniPanels.Add(NameMap.PanelCharacter, new CustomPanel(this.transform.Find(NameMap.PanelCharacter).gameObject, CustomPanelState.ifOpen));
+        aniPanels.Add(NameMap.PanelSelectCharacter, new CustomPanel(this.transform.Find(NameMap.PanelSelectCharacter).gameObject, CustomPanelState.ifOpen));
 
         usernameInPanelStart = MyUtil.FindOneInChildren(GameObject.Find("PanelStart").transform, "UserName").gameObject.GetComponentInChildren<TextMeshProUGUI>();
         servernameInPanelStart = GameObject.Find("ServerName").GetComponentInChildren<TextMeshProUGUI>();

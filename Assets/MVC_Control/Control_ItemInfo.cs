@@ -13,7 +13,6 @@ public class Control_ItemInfo
     public Control_ItemInfo(Module_ItemInfo item, View_ItemInfo view)
     {
         this.module = item;
-        this.module.c = this;
         this.view = view;
         this.view.c = this;
 

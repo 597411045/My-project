@@ -17,10 +17,7 @@ public class Module_QuestInfo
     private string _description;
     public QuestStatus _status;
 
-
-    public Vector3 NPCPosition;
-    public Control_QuestInfo c;
-
+    public NPCScript NPC;
 
     public EventHandler<int> IdHandler;
     public int Id
@@ -37,10 +34,17 @@ public class Module_QuestInfo
     public EventHandler<string> DescriptionHandler;
     public string Description { get => _description; set { _description = value; if (DescriptionHandler != null) { DescriptionHandler(null, _description); } } }
     public EventHandler<QuestStatus> StatusHandler;
-    public QuestStatus Status { get => _status; set { _status = value; if (StatusHandler != null) { StatusHandler(null, _status); } } }
+    public QuestStatus Status
+    {
+        get => _status; set
+        {
+            _status = value;
+            if (StatusHandler != null) { StatusHandler(null, _status); }
+        }
+    }
 
 
-    public Module_QuestInfo(string fileName, int id)
+    public Module_QuestInfo(string fileName, int id, NPCScript n = null)
     {
         GetDataFromCSV(fileName, id);
     }
@@ -69,9 +73,9 @@ public class Module_QuestInfo
                     propertys[i].SetValue(this, CSVData[i]);
                     continue;
                 }
-                if (propertys[i].PropertyType == typeof(ItemType))
+                if (propertys[i].PropertyType == typeof(QuestStatus))
                 {
-                    propertys[i].SetValue(this, Enum.Parse(typeof(ItemType), CSVData[i]));
+                    propertys[i].SetValue(this, Enum.Parse(typeof(QuestStatus), CSVData[i]));
                     continue;
                 }
             }

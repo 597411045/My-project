@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ public class CustomPanel
     public GameObject GameObjectPanel;
     public Animation animation;
     public List<AnimationState> list = new List<AnimationState>();
-    public bool isOpen;
+    public CustomPanelState state;
 
     private Image ItemImage;
     private Text ItemName;
@@ -57,8 +58,9 @@ public class CustomPanel
         }
     }
 
-    public CustomPanel(GameObject go)
+    public CustomPanel(GameObject go, CustomPanelState s = 0)
     {
+        this.state = s;
         GameObjectPanel = go;
         animation = GameObjectPanel.GetComponent<Animation>();
         if (animation != null)
@@ -78,3 +80,11 @@ public class CustomPanel
     }
 }
 
+[Flags]
+public enum CustomPanelState
+{
+    [Description("Close")]
+    ifOpen = 1 << 0,
+    [Description("Ignore Cinemachine Restriction")]
+    ifIgnore = 1 << 2
+}
