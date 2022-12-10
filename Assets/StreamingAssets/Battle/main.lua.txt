@@ -1,0 +1,96 @@
+require("CharacterBuilder")
+
+function AutoTeamAttack(aTeam, iTeam, i)
+    if (aTeam[i] ~= nil) then
+        local random = math.random(1, #iTeam)
+        if aTeam[i].object:Attack(iTeam[random].object) then
+            table.remove(iTeam, random)
+            if #iTeam == 0 then
+                GameStatus = false;
+                return true;
+            end
+        end
+        print("----------")
+    end
+end
+
+GameStatus = true;
+local round = 1
+function AutoGameRound()
+    GlobalTable.LogText.text = "Round:[" .. round .. "]==========Start\n"
+    for i = 1, 3, 1 do
+        if AutoTeamAttack(CharacterBuilder.Team1, CharacterBuilder.Team2, i) then
+            GlobalTable.LogText.text = GlobalTable.LogText.text .. "Team1 win\n"
+            GameStatus = false;
+            break
+        end
+
+        if AutoTeamAttack(CharacterBuilder.Team2, CharacterBuilder.Team1, i) then
+            GlobalTable.LogText.text = GlobalTable.LogText.text .. "Team2 win\n"
+            GameStatus = false;
+            break
+        end
+    end
+    GlobalTable.LogText.text = GlobalTable.LogText.text .. "Round:[" .. round .. "]==========End\n"
+    round = round + 1
+
+    if round >= 50 then
+        GameStatus = false;
+    end
+    ShowAllInfo()
+    --
+end
+
+function ManualAttack(Attacker, Target)
+    Attacker.object:Attack(Target.object)
+end
+
+function ShowAllInfo()
+    -- for k, v in pairs(CharacterBuilder.Team1) do
+    --     v.object:ShowAllInfo();
+    -- end
+    -- for k, v in pairs(CharacterBuilder.Team2) do
+    --     v.object:ShowAllInfo();
+    -- end
+end
+
+function luaAwake()
+    print('luaAwake')
+end
+
+function luaStart()
+    print('luaStart')
+    math.randomseed(tostring(os.time()):reverse():sub(1, 7))
+    CharacterBuilder.main()
+    ShowAllInfo()
+end
+
+function luaUpdate()
+    print('luaUpdate')
+    -- if GameStatus then
+    --     AutoGameRound()
+    -- end
+end
+
+function luaDestroy()
+    print('luaDestroy 555')
+end
+
+function ManualAttack(a, b)
+    a:Attack(b);
+end
+
+-- function HotFix()
+--     xlua.hotfix(CS.LuaScript, 'HotFixTest', function()
+--         print('lua')
+--     end)
+-- end
+
+-- local ret, p2, p3, csfunc = GlobalTable:TestFunc({
+--     x = 3,
+--     y = 'test'
+-- }, 100, function()
+--     print('lua test')
+-- end)
+-- print(ret, p2, p3, csfunc)
+-- csfunc();

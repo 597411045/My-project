@@ -32,13 +32,5 @@ public class Control_ItemInfo
         module.Refresh();
     }
 
-    //public static Module_ItemInfo GetRandomItem()
-    //{
-    //    Module_ItemInfo item = Module_ItemInfo.BaseItemList[UnityEngine.Random.Range(0, Module_ItemInfo.BaseItemList.Count - 1)].Clone();
-    //    item.Atk = UnityEngine.Random.Range(1, 10);
-    //    item.Life = UnityEngine.Random.Range(1, 10);
-    //    item.Power = item.Atk + item.Life;
-    //    item.Count = 1;
-    //    return item;
-    //}
+ 
 }

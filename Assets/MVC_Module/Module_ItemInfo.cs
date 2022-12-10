@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using XLua;
 
 public class Module_ItemInfo
 {
@@ -29,7 +30,7 @@ public class Module_ItemInfo
     private int _count;
     private string _description;
 
-    
+    public Dictionary<int, Module_Effect> effectList = new Dictionary<int, Module_Effect>();
 
     public EventHandler<int> IdHandler;
     public int Id
@@ -193,15 +194,18 @@ public class Module_ItemInfo
     {
         GetDataFromCSV(id);
     }
+
+    private Module_ItemInfo()
+    {
+    }
+
     private void GetDataFromCSV(int id)
     {
         TextAsset t = Resources.Load<TextAsset>("Inventory");
         string[] lines = t.ToString().Replace("\r", "").Split('\n');
-
         //Module_ItemInfo itemInfo;
         //PropertyInfo[] propertys = itemInfo.GetType().GetProperties();
         PropertyInfo[] propertys = typeof(Module_ItemInfo).GetProperties();
-
         for (int j = 1; j < lines.Length; j++)
         {
             string[] CSVData = lines[j].Split(',');
@@ -229,10 +233,9 @@ public class Module_ItemInfo
             //BaseItemList.Add(itemInfo);
         }
     }
-
-    public Module_ItemInfo Clone(int id)
+    public Module_ItemInfo Clone()
     {
-        Module_ItemInfo item = new Module_ItemInfo(id);
+        Module_ItemInfo item = new Module_ItemInfo();
         PropertyInfo[] propertys = item.GetType().GetProperties();
         for (int i = 0; i < propertys.Length; i++)
         {
@@ -264,3 +267,4 @@ public enum ItemType
     Consume,
     All
 }
+

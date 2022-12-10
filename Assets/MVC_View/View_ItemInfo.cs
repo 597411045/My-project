@@ -185,7 +185,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             {
                 if (c.module.Type == ItemType.Consume)
                 {
-                    //GameManagerInVillage.Player.TryUseItem(item);
+                    GameManagerInVillage.PlayerControl.TryUseItem(c);
                 }
                 else
                 {

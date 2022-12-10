@@ -6,9 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using XLua;
 
+[Hotfix]
 public class Module_PlayerInfo
 {
+    public Dictionary<int, Module_Effect> effectList = new Dictionary<int, Module_Effect>();
+
+
     public static string LocalUsername;
     public static string LocalPassword;
     public static int CharacterId = 0;
@@ -259,15 +264,28 @@ public class Module_PlayerInfo
         }
     }
 
+    [LuaCallCSharp]
     private void GetItemDataFromCSV()
     {
         int[] itemIds = { 1001, 1002, 1007, 1008, 1009, 1010, 1011 };
         foreach (var i in itemIds)
         {
-            Inventory.Add(i, new Module_ItemInfo(i));
+            Module_ItemInfo m = new Module_ItemInfo(i);
+            Inventory.Add(i, m);
+            if (i == 1001)
+            {
+                Effect_AboutHealth tmpEff = new Effect_AboutHealth();
+                m.effectList.Add(i, tmpEff);
+            }
+            if (i == 1002)
+            {
+                Effect_AboutHealth tmpEff = new Effect_AboutHealth();
+                tmpEff.Duration = 10;
+                tmpEff.Inverval = 2;
+                m.effectList.Add(i, tmpEff);
+            }
         }
     }
-
     private void GetEquipDataFromCSV()
     {
         int[] itemIds = { 1003, 1004, 1005, 1006 };

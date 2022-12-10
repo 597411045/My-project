@@ -32,6 +32,7 @@ public class PlayMoveScript : MonoBehaviour
         GameManagerInVillage.timers.Add(new PlayerAroundDected(this));
         GameManagerInVillage.timers.Add(new PlayerPressQAroundNPC(this));
         GameManagerInVillage.timers.Add(new PlayerTriggerCinemachine(CFL));
+        GameManagerInVillage.timers.Add(new PlayerCheckStatus(this));
     }
 
     //void Update()
@@ -252,13 +253,55 @@ public class PlayerPressQAroundNPC : BaseUpdateAction
             if ((PanelManagerInVillage.Instance.Panels[NameMap.PanelInteractive].state & CustomPanelState.ifOpen) == CustomPanelState.ifOpen
                 && Input.GetKeyDown(KeyCode.Q))
             {
+                NPCScript.NPCQuestUI.ClearQuest();
                 foreach (var i in p.NearestNPC.module.Quests)
                 {
-                    NPCScript.NPCQuestUI.Clear();
                     NPCScript.NPCQuestUI.TryAddQuest(i.Value);
                 }
 
                 PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelNPCQuest);
+            }
+        }
+    }
+}
+
+public class PlayerCheckStatus : BaseUpdateAction
+{
+    PlayMoveScript p;
+    Dictionary<int, Module_Effect> tmpDic;
+    List<int> objectNeedToBeRemoved = new List<int>();
+    public PlayerCheckStatus(PlayMoveScript p) : base(1)
+    {
+        this.p = p;
+        action += doAction;
+
+        tmpDic = GameManagerInVillage.PlayerControl.module.effectList;
+    }
+
+    public void doAction()
+    {
+        if (isStoped == false)
+        {
+            if (tmpDic.Count > 0)
+            {
+                foreach (var i in tmpDic)
+                {
+                    i.Value.Timer += Time.deltaTime;
+                    i.Value.TotalTimer += Time.deltaTime;
+                    if (i.Value.Timer > i.Value.Inverval)
+                    {
+                        i.Value.Affect(GameManagerInVillage.PlayerControl.module);
+                        i.Value.Timer = 0;
+                    }
+                    if (i.Value.TotalTimer > i.Value.Duration)
+                    {
+                        objectNeedToBeRemoved.Add(i.Key);
+                    }
+                }
+                foreach (var i in objectNeedToBeRemoved)
+                {
+                    tmpDic.Remove(i);
+                }
             }
         }
     }

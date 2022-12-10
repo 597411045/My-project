@@ -51,20 +51,20 @@ public class SlotManager
 
             v.slotType = this.slotType;
             c.module.Refresh();
-            SlotList[SlotList.IndexOf(avaliableSlot)].ic = c;
+            avaliableSlot.ic = c;
         }
     }
     public bool TryGetItemFrom(Module_ItemInfo itemToBeTransfered, SlotManager fromSlotManager)
     {
         if (GetAvaliableSlot(out avaliableSlot, itemToBeTransfered.Type))
         {
-            Control_ItemInfo c = fromSlotManager.FindControlByModule(itemToBeTransfered);
+            Control_ItemInfo c = fromSlotManager.FindItemControlByModule(itemToBeTransfered);
             c.view.gameObject.transform.SetParent(avaliableSlot.SlotGameObject.transform);
             c.view.gameObject.transform.localPosition = Vector3.zero;
             c.view.slotType = this.slotType;
 
             avaliableSlot.ic = c;
-            fromSlotManager.Remove(c);
+            fromSlotManager.RemoveItemRecord(c);
             return true;
         }
         return false;
@@ -86,6 +86,8 @@ public class SlotManager
         {
             Button_InVillage.Instance.OnQuestButtonClick(i);
         });
+
+        SlotList.Add(new Slot() { SlotGameObject = go, qc = c });
     }
     public bool TryAcceptQuestFrom(Module_QuestInfo i, SlotManager fromSlotManager)
     {
@@ -157,7 +159,7 @@ public class SlotManager
         return false;
     }
 
-    public void Remove(Control_ItemInfo c)
+    public void RemoveItemRecord(Control_ItemInfo c)
     {
         for (int i = 0; i < SlotList.Count; i++)
         {
@@ -169,7 +171,7 @@ public class SlotManager
         }
     }
 
-    public Control_ItemInfo FindControlByModule(Module_ItemInfo m)
+    public Control_ItemInfo FindItemControlByModule(Module_ItemInfo m)
     {
         for (int i = 0; i < SlotList.Count; i++)
         {
@@ -181,9 +183,14 @@ public class SlotManager
         return null;
     }
 
-    public void Clear()
+    public void ClearQuest()
     {
-
+        for (int i = 0; i < SlotList.Count; i++)
+        {
+            if (SlotList[i].qc != null)
+                GameObject.Destroy(SlotList[i].qc.view.gameObject);
+            SlotList[i].qc = null;
+        }
     }
 }
 

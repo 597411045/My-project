@@ -111,27 +111,44 @@ public class Control_PlayerInfo
         GameManagerInVillage.timers.Add(new DynamicValue(texts, time, ac));
     }
 
-    public bool TryPickItem(Module_ItemInfo item)
+    public bool TryUseItem(Control_ItemInfo itemToBeUsed)
     {
-        if (item.Type == ItemType.Consume)
+        if (module.Inventory.ContainsKey(itemToBeUsed.module.Id))
         {
-            if (module.Inventory.ContainsKey(item.Id))
+            foreach(var i in itemToBeUsed.module.effectList)
             {
-                module.Inventory[item.Id].Count++;
-                return true;
+                this.module.effectList.Add(i.Key, i.Value);
             }
-            else
-            {
-                module.Inventory.Add(item.Id, item);
-            }
+
+            module.Inventory[itemToBeUsed.module.Id].Count--;
+            module.Inventory[itemToBeUsed.module.Id].Refresh();
+
+            return true;
         }
-        else
-        {
-            //Inventory.Add(item.specialId, item);
-        }
-        PlayerInventory.TryAddItem(item);
-        return true;
+        return false;
     }
+
+    //public bool TryPickItem(Module_ItemInfo item)
+    //{
+    //    if (item.Type == ItemType.Consume)
+    //    {
+    //        if (module.Inventory.ContainsKey(item.Id))
+    //        {
+    //            module.Inventory[item.Id].Count++;
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            module.Inventory.Add(item.Id, item);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        //Inventory.Add(item.specialId, item);
+    //    }
+    //    PlayerInventory.TryAddItem(item);
+    //    return true;
+    //}
 
     //public bool TryDropItem(Module_ItemInfo item, SlotManager toSlotManager)
     //{
@@ -146,6 +163,16 @@ public class Control_PlayerInfo
     //    //PlayerInventory.RemoveRecord(item);
     //    return true;
     //}
+
+
+    private void BuildPlayerSkill()
+    {
+        for (int i = 0; i < SkillInfo.BaseItemList.Count; i++)
+        {
+            module.Skill.Add(SkillInfo.BaseItemList[i].Id, SkillInfo.BaseItemList[i].Clone());
+            PanelManagerInVillage.Instance.PlayerSkill.TryAddSkill(module.Skill[SkillInfo.BaseItemList[i].Id]);
+        }
+    }
 
     private void AddPlayerItemToSlotManager()
     {
@@ -173,14 +200,7 @@ public class Control_PlayerInfo
             if (i.Value != null) PlayerQuest.TryAddQuest(i.Value);
         }
     }
-    private void BuildPlayerSkill()
-    {
-        for (int i = 0; i < SkillInfo.BaseItemList.Count; i++)
-        {
-            module.Skill.Add(SkillInfo.BaseItemList[i].Id, SkillInfo.BaseItemList[i].Clone());
-            PanelManagerInVillage.Instance.PlayerSkill.TryAddSkill(module.Skill[SkillInfo.BaseItemList[i].Id]);
-        }
-    }
+    
 }
 
 public class PlayerArgs : EventArgs

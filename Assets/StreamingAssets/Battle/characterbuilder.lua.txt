@@ -1,0 +1,90 @@
+CharacterBuilder = {
+    Team1 = {},
+    Team2 = {},
+    main = function()
+
+        CharacterBuilder:BuildTeam(CharacterBuilder.Team1, '-Team1-')
+        CharacterBuilder:BuildTeam(CharacterBuilder.Team2, '-Team2-')
+
+    end
+}
+local index = 1;
+function CharacterBuilder:BuildTeam(team, teamName)
+
+    for i = 1, 3, 1 do
+        local random = math.random(1, 2)
+        local tmpObject
+        if random == 1 then
+            tmpObject = { object = CS.Character_Warrior() };
+        end
+        if random == 2 then
+            tmpObject = { object = CS.Character_Mage() };
+        end
+        setmetatable(tmpObject, { __index = tmpObject })
+
+        tmpObject.object.Name = tmpObject.object.Name .. teamName .. i
+        tmpObject.object.Index = index;
+
+        -- tmpObject.Name_Text = CS.UnityEngine.GameObject.Find('S' .. tostring(index)).transform:Find('Name'):GetComponent('Text')
+        -- tmpObject.Type_Text = CS.UnityEngine.GameObject.Find('S' .. tostring(index)).transform:Find('Type'):GetComponent('Text')
+        -- tmpObject.HP_Text = CS.UnityEngine.GameObject.Find('S' .. tostring(index)).transform:Find('HP'):GetComponent('Text')
+        -- tmpObject.MP_Text = CS.UnityEngine.GameObject.Find('S' .. tostring(index)).transform:Find('MP'):GetComponent('Text')
+        -- tmpObject.ATK_Text = CS.UnityEngine.GameObject.Find('S' .. tostring(index)).transform:Find('ATK'):GetComponent('Text')
+        -- tmpObject.DEF_Text = CS.UnityEngine.GameObject.Find('S' .. tostring(index)).transform:Find('DEF'):GetComponent('Text')
+
+        tmpObject.object.A_ShowAllInfo = tmpObject.object.A_ShowAllInfo +
+            CharacterBuilder:BuildShowAllInfoFunction(tmpObject)
+
+        tmpObject.object.A_Attack = CharacterBuilder:BuildAttackFunction(tmpObject);
+        tmpObject.object:E_Injured('+', CharacterBuilder:BuildInjuredFunction(tmpObject));
+        table.insert(team, tmpObject)
+        index = index + 1;
+    end
+end
+
+function CharacterBuilder:BuildShowAllInfoFunction(tmpObject)
+    return function()
+        -- tmpObject.Name_Text.text = tmpObject.object.Name
+        -- tmpObject.Type_Text.text = tmpObject.object.Type
+        -- tmpObject.HP_Text.text = tmpObject.object.HP
+        -- tmpObject.MP_Text.text = tmpObject.object.MP
+        -- tmpObject.ATK_Text.text = tmpObject.object.ATK
+        -- tmpObject.DEF_Text.text = tmpObject.object.DEF
+    end
+end
+
+LogText = CS.UnityEngine.GameObject.Find('LogText'):GetComponent('Text')
+function CharacterBuilder:BuildAttackFunction(tmpObject)
+    return function(targetObject)
+        LogText.text = LogText.text ..
+            tmpObject.object.Name .. " try to make [" .. tmpObject.object.ATK ..
+            "] damage on " .. targetObject.Name .. "\n"
+        return targetObject:Injured(tmpObject.object.ATK)
+    end
+end
+
+function CharacterBuilder:BuildInjuredFunction(tmpObject)
+    return function(atk)
+        local damage = atk - tmpObject.object.DEF
+        if damage < 0 then
+            LogText.text = LogText.text .. tmpObject.object.Name .. " blocked the damage" .. "\n"
+            return
+        end
+
+        tmpObject.object.HP = tmpObject.object.HP - damage
+
+        LogText.text =
+        LogText.text ..
+            tmpObject.object.Name ..
+            " take [" .. damage .. "] damage, remain HP:[" .. tmpObject.object.HP .. "]" ..
+            "\n"
+        if tmpObject.object.HP <= 0 then
+            LogText.text             = LogText.text .. tmpObject.object.Name .. " Dead" .. "\n"
+            tmpObject.object.Name    = 'Dead Warrior'
+            --tmpObject.Name_Text.text = 'Dead Warrior'
+            tmpObject.object.HP      = 0
+            --tmpObject.HP_Text.text   = 0
+            return true
+        end
+    end
+end

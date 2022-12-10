@@ -1,0 +1,29 @@
+-- function HotFix()
+--     xlua.hotfix(CS.LuaScript, 'HotFixTest', function()
+--         print('lua dynamic 555')
+--     end)
+-- end
+xlua.hotfix(CS.Module_PlayerInfo, 'GetItemDataFromCSV', function(self)
+    itemIds = {1001, 1002};
+    for i = 1, #itemIds do
+        item = CS.Module_ItemInfo(itemIds[i]);
+        self.Inventory:Add(itemIds[i], item);
+        if (itemIds[i] == 1001) then
+
+            tmpEff = CS.Effect_AboutHealth();
+            item.effectList:Add(itemIds[i], tmpEff);
+        end
+        if (itemIds[i] == 1002) then
+
+            tmpEff = CS.Effect_AboutHealth();
+            tmpEff.Duration = 10;
+            tmpEff.Inverval = 2;
+            item.effectList:Add(itemIds[i], tmpEff);
+        end
+    end
+end)
+
+xlua.hotfix(CS.Effect_AboutHealth, 'action', function(self, targetPerson)
+    targetPerson.Hp = targetPerson.Hp + 10;
+    print('trigger Effect_AboutHealth lua, remain ' .. self.Duration - self.TotalTimer .. ',interval ' .. self.Inverval);
+end)
