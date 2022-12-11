@@ -31,6 +31,7 @@ public class Control_PlayerInfo
         player.MpHandler += view.MpUIAction;
         player.LifeHandler += view.LifeUIAction;
         player.AtkHandler += view.AtkUIAction;
+        player.DialogHandler += view.DialogueAction;
         module.Refresh();
 
         if (p == PlayerType.Player)
@@ -200,7 +201,8 @@ public class Control_PlayerInfo
             if (i.Value != null) PlayerQuest.TryAddQuest(i.Value);
         }
     }
-    
+
+
 }
 
 public class PlayerArgs : EventArgs

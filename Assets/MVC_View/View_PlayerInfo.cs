@@ -173,6 +173,18 @@ public class View_PlayerInfo
         }
 
     }
+
+    public Text DialogueUI;
+    public Text DialogicChoice1;
+    public Text DialogicChoice2;
+    public Text DialogicChoice3;
+    public void DialogueAction(object sender, Module_Dialogue arg)
+    {
+        if (DialogueUI != null) DialogueUI.text = arg.Dialogue;
+        if (DialogicChoice1 != null) DialogicChoice1.text = arg[0]._dialogue;
+        if (DialogicChoice2 != null) DialogicChoice2.text = arg[1]._dialogue;
+        if (DialogicChoice3 != null) DialogicChoice3.text = arg[2]._dialogue;
+    }
 }
 
 public enum PlayerType

@@ -69,6 +69,7 @@
     <Compile Include="Assets\Button_PlayVoiceAndChangeText.cs" />
     <Compile Include="Assets\CustomPanel.cs" />
     <Compile Include="Assets\EffectExamples\Misc Effects\Scripts\SpawnEffect.cs" />
+    <Compile Include="Assets\FXAutoScript.cs" />
     <Compile Include="Assets\GameManager\Button_InStartMenu.cs" />
     <Compile Include="Assets\GameManager\Button_InVillage.cs" />
     <Compile Include="Assets\GameManager\GameManagerInVillage.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Assets\MVC_Control\Control_ItemInfo.cs" />
     <Compile Include="Assets\MVC_Control\Control_PlayerInfo.cs" />
     <Compile Include="Assets\MVC_Control\Control_QuestInfo.cs" />
+    <Compile Include="Assets\MVC_Module\Module_Dialogue.cs" />
     <Compile Include="Assets\MVC_Module\Module_Effect.cs" />
     <Compile Include="Assets\MVC_Module\Module_ItemInfo.cs" />
     <Compile Include="Assets\MVC_Module\Module_PlayerInfo.cs" />
@@ -91,6 +93,8 @@
     <Compile Include="Assets\MVC_View\View_QuestInfo.cs" />
     <Compile Include="Assets\MyUtil.cs" />
     <Compile Include="Assets\NPCScript.cs" />
+    <Compile Include="Assets\NPCScript1.cs" />
+    <Compile Include="Assets\NPCScript2.cs" />
     <Compile Include="Assets\Panel_FadeAndShow.cs" />
     <Compile Include="Assets\PlayMoveScript.cs" />
     <Compile Include="Assets\ServerUnitScript.cs" />

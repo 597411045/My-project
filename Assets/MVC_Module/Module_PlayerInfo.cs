@@ -12,6 +12,48 @@ using XLua;
 public class Module_PlayerInfo
 {
     public Dictionary<int, Module_Effect> effectList = new Dictionary<int, Module_Effect>();
+    public Dictionary<int, Module_Dialogue> dialogList = new Dictionary<int, Module_Dialogue>();
+
+    public EventHandler<Module_Dialogue> DialogHandler;
+    public void GetDialogue()
+    {
+        if (DialogHandler != null && dialogList.ContainsKey(dialogueIndex))
+        {
+            DialogHandler(null, dialogList[dialogueIndex]);
+        }
+    }
+
+    public int dialogueIndex;
+    public void SetDialogueIndex(int i)
+    {
+        dialogueIndex = i;
+
+        PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelDialogue, () =>
+        {
+            PanelManagerInVillage.Instance.Panels[NameMap.PanelDialogue].SetPlayer(GameManagerInVillage.PlayerObject.GetComponent<PlayMoveScript>().NearestNPC.view);
+        });
+        for (int j = 0; j < 3; j++)
+        {
+            if (dialogList[i][j]._dialogue != null)
+            {
+                if (dialogList[i][j]._dialogue.Contains("end"))
+                {
+                    dialogList[i][j]._choiceAction += (x, y) =>
+                    {
+                        dialogueIndex = dialogList[x][y]._nextid;
+                        PanelManagerInVillage.Instance.ChangePanel(NameMap.PanelDialogue, null);
+                    };
+                }
+                else
+                {
+                    dialogList[i][j]._choiceAction += (x, y) =>
+                    {
+                        SetDialogueIndex(dialogList[x][y]._nextid);
+                    };
+                }
+            }
+        }
+    }
 
 
     public static string LocalUsername;
@@ -236,6 +278,7 @@ public class Module_PlayerInfo
         {
             propertys[i].SetValue(this, propertys[i].GetValue(this));
         }
+        GetDialogue();
     }
 
     private void GetPlayerDataFromCSV()
@@ -309,3 +352,4 @@ public class Module_PlayerInfo
         }
     }
 }
+

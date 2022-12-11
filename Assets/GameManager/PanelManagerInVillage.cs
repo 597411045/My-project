@@ -43,13 +43,14 @@ public class PanelManagerInVillage : MonoBehaviour
         Panels.Add(NameMap.PanelNotification, new CustomPanel(this.transform.Find(NameMap.PanelNotification).gameObject));
         Panels.Add(NameMap.PanelEquipmnemt, new CustomPanel(this.transform.Find(NameMap.PanelEquipmnemt).gameObject));
         Panels.Add(NameMap.PanelInventory, new CustomPanel(this.transform.Find(NameMap.PanelInventory).gameObject));
-        Panels.Add(NameMap.PanelItemDetail, new CustomPanel(this.transform.Find(NameMap.PanelItemDetail).gameObject));
-        Panels.Add(NameMap.PanelEquipDetail, new CustomPanel(this.transform.Find(NameMap.PanelEquipDetail).gameObject));
+        Panels.Add(NameMap.PanelItemDetail, new PanelForItem(this.transform.Find(NameMap.PanelItemDetail).gameObject));
+        Panels.Add(NameMap.PanelEquipDetail, new PanelForItem(this.transform.Find(NameMap.PanelEquipDetail).gameObject));
         Panels.Add(NameMap.PanelMenu, new CustomPanel(this.transform.Find(NameMap.PanelMenu).gameObject));
         Panels.Add(NameMap.PanelQuest, new CustomPanel(this.transform.Find(NameMap.PanelQuest).gameObject));
         Panels.Add(NameMap.PanelSkill, new CustomPanel(this.transform.Find(NameMap.PanelSkill).gameObject));
-        Panels.Add(NameMap.PanelInteractive, new CustomPanel(this.transform.Find(NameMap.PanelInteractive).gameObject, CustomPanelState.ifIgnore));
+        Panels.Add(NameMap.PanelInteractive, new PanelForPlayer(this.transform.Find(NameMap.PanelInteractive).gameObject, CustomPanelState.ifIgnore));
         Panels.Add(NameMap.PanelNPCQuest, new CustomPanel(this.transform.Find(NameMap.PanelNPCQuest).gameObject));
+        Panels.Add(NameMap.PanelDialogue, new PanelForPlayer(this.transform.Find(NameMap.PanelDialogue).gameObject));
 
         //PlayerInventory = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelInventory").transform, "Slots").gameObject, SlotType.Inventory);
         //PlayerEquipmnent = new SlotManager(MyUtil.FindOneInChildren(GameObject.Find("PanelEquipmnemt").transform, "Equips").gameObject, SlotType.Equipment);
@@ -70,6 +71,7 @@ public class PanelManagerInVillage : MonoBehaviour
         Panels[NameMap.PanelSkill].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelInteractive].GameObjectPanel.SetActive(false);
         Panels[NameMap.PanelNPCQuest].GameObjectPanel.SetActive(false);
+        Panels[NameMap.PanelDialogue].GameObjectPanel.SetActive(false);
     }
 
     private void SetPanel(string panelName, PanelAction a)

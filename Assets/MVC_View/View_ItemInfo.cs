@@ -202,7 +202,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelItemDetail, () =>
             {
-                PanelManagerInVillage.Instance.Panels[NameMap.PanelItemDetail].Item = c.view;
+                PanelManagerInVillage.Instance.Panels[NameMap.PanelItemDetail].SetItem(c.view);
                 RectTransform PanelRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelItemDetail].GameObjectPanel.GetComponent<RectTransform>();
                 RectTransform AlignedObjectRect = this.gameObject.GetComponent<RectTransform>();
                 PanelRect.position = AlignedObjectRect.position;
@@ -220,7 +220,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             {
                 PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelEquipDetail, () =>
                 {
-                    PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].Item = c.view;
+                    PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].SetItem(c.view);
                     RectTransform PanelRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].GameObjectPanel.GetComponent<RectTransform>();
                     RectTransform AlignedObjectRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelInventory].GameObjectPanel.GetComponent<RectTransform>();
                     PanelRect.position = AlignedObjectRect.position;
@@ -235,7 +235,7 @@ public class View_ItemInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             {
                 PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelEquipDetail, () =>
                 {
-                    PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].Item = c.view;
+                    PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].SetItem(c.view);
                     RectTransform PanelRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipDetail].GameObjectPanel.GetComponent<RectTransform>();
                     RectTransform AlignedObjectRect = PanelManagerInVillage.Instance.Panels[NameMap.PanelEquipmnemt].GameObjectPanel.GetComponent<RectTransform>();
                     PanelRect.position = AlignedObjectRect.position;

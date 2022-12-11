@@ -40,6 +40,8 @@ public class GameManagerInVillage : MonoBehaviour
         PlayerControl = new Control_PlayerInfo(m, v, PlayerType.Player);
 
         SkillInfo s = new SkillInfo();
+
+        Module_Dialogue d = new Module_Dialogue();
     }
 
     private void Start()

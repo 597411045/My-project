@@ -25,6 +25,7 @@ static class NameMap
     public static string PanelSkill = "PanelSkill";
     public static string PanelInteractive = "PanelInteractive";
     public static string PanelNPCQuest = "PanelNPCQuest";
+    public static string PanelDialogue = "PanelDialogue";
 
     public static string PanelFade = "PanelFade";
     public static string PanelShow = "PanelShow";

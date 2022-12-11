@@ -188,9 +188,12 @@ public class SlotManager
         for (int i = 0; i < SlotList.Count; i++)
         {
             if (SlotList[i].qc != null)
+            {
+                //SlotList[i].qc.view.gameObject.transform.SetParent(null);
                 GameObject.Destroy(SlotList[i].qc.view.gameObject);
-            SlotList[i].qc = null;
+            }
         }
+        SlotList.Clear();
     }
 }
 

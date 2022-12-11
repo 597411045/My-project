@@ -16,14 +16,29 @@ public class Control_QuestInfo
         this.view = view;
         this.view.c = this;
 
-        item.IdHandler += view.IdUIAction;
-        item.NameHandler += view.NameUIAction;
-        item.ProfileHandler += view.ProfileUIAction;
-        item.RewardItemIdHandler += view.RewardItemIdUIAction;
-        item.DescriptionHandler += view.DescriptionUIAction;
-        item.StatusHandler += view.StatusUIAction;
-        
+        LinkMV();
+
         module.Refresh();
+    }
+
+    private void LinkMV()
+    {
+        this.module.IdHandler += this.view.IdUIAction;
+        this.module.NameHandler += this.view.NameUIAction;
+        this.module.ProfileHandler += this.view.ProfileUIAction;
+        this.module.RewardItemIdHandler += this.view.RewardItemIdUIAction;
+        this.module.DescriptionHandler += this.view.DescriptionUIAction;
+        this.module.StatusHandler += this.view.StatusUIAction;
+    }
+
+    public void UnlinkMV()
+    {
+        this.module.IdHandler -= this.view.IdUIAction;
+        this.module.NameHandler -= this.view.NameUIAction;
+        this.module.ProfileHandler -= this.view.ProfileUIAction;
+        this.module.RewardItemIdHandler -= this.view.RewardItemIdUIAction;
+        this.module.DescriptionHandler -= this.view.DescriptionUIAction;
+        this.module.StatusHandler -= this.view.StatusUIAction;
     }
 
     //public static Module_ItemInfo GetRandomItem()

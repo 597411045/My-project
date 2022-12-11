@@ -148,6 +148,11 @@ public class Button_InVillage : MonoBehaviour
 
     }
 
+    public void TestDialogue()
+    {
+        PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelDialogue);
+    }
+
 }
 
 

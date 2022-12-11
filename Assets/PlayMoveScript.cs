@@ -13,6 +13,7 @@ public class PlayMoveScript : MonoBehaviour
     public bool isAutoNav;
     public CinemachineFreeLook CFL;
     public NPCScript NearestNPC;
+    public GameObject BigExplosion;
 
     Vector3 moveVector3;
     private void Awake()
@@ -22,61 +23,21 @@ public class PlayMoveScript : MonoBehaviour
         //rigidbody = this.gameObject.GetComponent<Rigidbody>();
         secondCamera = GameObject.Find("SecondCamera").GetComponent<Camera>();
         CFL = GameObject.Find("CM FreeLook1").GetComponent<CinemachineFreeLook>();
+        BigExplosion = MyUtil.FindOneInChildren(this.transform, "BigExplosion").gameObject;
+        BigExplosion.SetActive(false);
     }
 
     void Start()
     {
         //navMeshAgent.updatePosition = false;
-        //navMeshAgent.updateRotation = false;
-        GameManagerInVillage.timers.Add(new PlayerMove(animator, navMeshAgent, secondCamera, this.transform));
+        navMeshAgent.updateRotation = false;
+        GameManagerInVillage.timers.Add(new NewPlayerMove(navMeshAgent, secondCamera, this.transform));
         GameManagerInVillage.timers.Add(new PlayerAroundDected(this));
-        GameManagerInVillage.timers.Add(new PlayerPressQAroundNPC(this));
+        GameManagerInVillage.timers.Add(new PlayerPressKeyAroundNPC(this));
         GameManagerInVillage.timers.Add(new PlayerTriggerCinemachine(CFL));
         GameManagerInVillage.timers.Add(new PlayerCheckStatus(this));
+        GameManagerInVillage.timers.Add(new AnimatorObverser(this));
     }
-
-    //void Update()
-    //{
-    //BackToPlayer = new Vector3(secondCamera.transform.position.x, this.transform.position.y, secondCamera.transform.position.z);
-    //moveVector3 = Vector3.zero;
-    //if (isAutoNav == false)
-    //{
-    //    animator.SetFloat("Speed", Mathf.Max(Mathf.Abs(Input.GetAxis("Vertical")), Mathf.Abs(Input.GetAxis("Horizontal"))) * 5);
-    //    if (Input.GetAxis("Vertical") != 0)
-    //    {
-    //        moveVector3 = ((BackToPlayer - this.transform.position) * -Input.GetAxis("Vertical")).normalized;
-    //        //navMeshAgent.velocity += ((BackToPlayer - this.transform.position) * -Input.GetAxis("Vertical")).normalized;
-    //        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((BackToPlayer - this.transform.position) * -Input.GetAxis("Vertical")), 0.1f);
-    //    }
-
-    //    if (Input.GetAxis("Horizontal") != 0)
-    //    {
-    //        moveVector3 += (Quaternion.AngleAxis(90, Vector3.up) * (BackToPlayer - this.transform.position) * -Input.GetAxis("Horizontal")).normalized;
-    //        //navMeshAgent.velocity += (Quaternion.AngleAxis(90, Vector3.up) * (BackToPlayer - this.transform.position) * -Input.GetAxis("Horizontal")).normalized;
-    //        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(Quaternion.AngleAxis(90, Vector3.up) * (BackToPlayer - this.transform.position) * -Input.GetAxis("Horizontal")), 0.1f);
-    //    }
-    //    moveVector3 *= 3;
-    //    navMeshAgent.velocity = moveVector3;
-    //    if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
-    //    {
-    //        navMeshAgent.velocity = Vector3.zero;
-    //    }
-    //}
-    //else
-    //{
-    //    if (Vector3.Distance(this.transform.position, navMeshAgent.destination) < 1)
-    //    {
-    //        isAutoNav = false;
-    //    }
-    //}
-
-    //navMeshAgent.nextPosition = this.transform.position;
-
-    //Vector3 v = transform.InverseTransformDirection(navMeshAgent.velocity);
-    //animator.SetFloat("Speed", v.z);
-    //animator.SetFloat("Angle", v.x);
-    //ani.SetFloat("Speed", nav.velocity.magnitude);
-    //}
 
     //private void OnAnimatorMove()
     //{
@@ -85,67 +46,8 @@ public class PlayMoveScript : MonoBehaviour
     //    //transform.position = v;
     //    navMeshAgent.nextPosition = transform.position;
     //    animator.ApplyBuiltinRootMotion();
+    //    //transform.position = navMeshAgent.nextPosition;
     //}
-}
-
-public class PlayerMove : BaseUpdateAction
-{
-    Animator animator;
-    NavMeshAgent navMeshAgent;
-    Camera secondCamera;
-    Vector3 BackToPlayer;
-    bool isAutoNav;
-
-    Vector3 moveVector3;
-    Transform thistransform;
-
-    public PlayerMove(Animator animator, NavMeshAgent navMeshAgent, Camera secondCamera, Transform thistransform) : base(1)
-    {
-        this.animator = animator;
-        this.navMeshAgent = navMeshAgent;
-        this.secondCamera = secondCamera;
-        this.thistransform = thistransform;
-        action += doAction;
-    }
-
-    public void doAction()
-    {
-        if (isStoped == false)
-        {
-            BackToPlayer = new Vector3(secondCamera.transform.position.x, thistransform.position.y, secondCamera.transform.position.z);
-            moveVector3 = Vector3.zero;
-            if (isAutoNav == false)
-            {
-                animator.SetFloat("Speed", Mathf.Max(Mathf.Abs(Input.GetAxis("Vertical")), Mathf.Abs(Input.GetAxis("Horizontal"))) * 5);
-                if (Input.GetAxis("Vertical") != 0)
-                {
-                    moveVector3 = ((BackToPlayer - thistransform.position) * -Input.GetAxis("Vertical")).normalized;
-                    //navMeshAgent.velocity += ((BackToPlayer - this.transform.position) * -Input.GetAxis("Vertical")).normalized;
-                    thistransform.rotation = Quaternion.Lerp(thistransform.rotation, Quaternion.LookRotation((BackToPlayer - thistransform.position) * -Input.GetAxis("Vertical")), 0.1f);
-                }
-
-                if (Input.GetAxis("Horizontal") != 0)
-                {
-                    moveVector3 += (Quaternion.AngleAxis(90, Vector3.up) * (BackToPlayer - thistransform.position) * -Input.GetAxis("Horizontal")).normalized;
-                    //navMeshAgent.velocity += (Quaternion.AngleAxis(90, Vector3.up) * (BackToPlayer - this.transform.position) * -Input.GetAxis("Horizontal")).normalized;
-                    thistransform.rotation = Quaternion.Lerp(thistransform.rotation, Quaternion.LookRotation(Quaternion.AngleAxis(90, Vector3.up) * (BackToPlayer - thistransform.position) * -Input.GetAxis("Horizontal")), 0.1f);
-                }
-                moveVector3 *= 3;
-                navMeshAgent.velocity = moveVector3;
-                if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
-                {
-                    navMeshAgent.velocity = Vector3.zero;
-                }
-            }
-            else
-            {
-                if (Vector3.Distance(thistransform.position, navMeshAgent.destination) < 1)
-                {
-                    isAutoNav = false;
-                }
-            }
-        }
-    }
 }
 
 public class PlayerAroundDected : BaseUpdateAction
@@ -169,7 +71,7 @@ public class PlayerAroundDected : BaseUpdateAction
             f += Time.deltaTime;
             if (f > 1)
             {
-                colliders = Physics.OverlapSphere(p.transform.position, 5);
+                colliders = Physics.OverlapSphere(p.transform.position, 3);
                 if (colliders.Length == 0) PanelManagerInVillage.Instance?.ChangePanel(NameMap.PanelInteractive, null);
                 for (int i = 0; i < colliders.Length; i++)
                 {
@@ -178,7 +80,7 @@ public class PlayerAroundDected : BaseUpdateAction
                         PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelInteractive, () =>
                         {
                             p.NearestNPC = colliders[i].GetComponent<NPCScript>();
-                            PanelManagerInVillage.Instance.Panels[NameMap.PanelInteractive].Player = p.NearestNPC.view;
+                            PanelManagerInVillage.Instance.Panels[NameMap.PanelInteractive].SetPlayer(p.NearestNPC.view);
                         });
                         break;
                     }
@@ -235,12 +137,12 @@ public class PlayerTriggerCinemachine : BaseUpdateAction
     }
 }
 
-public class PlayerPressQAroundNPC : BaseUpdateAction
+public class PlayerPressKeyAroundNPC : BaseUpdateAction
 {
     PlayMoveScript p;
     //Transform thistransform;
     //NPCScript NearestNPC;
-    public PlayerPressQAroundNPC(PlayMoveScript p) : base(1)
+    public PlayerPressKeyAroundNPC(PlayMoveScript p) : base(1)
     {
         this.p = p;
         action += doAction;
@@ -251,15 +153,24 @@ public class PlayerPressQAroundNPC : BaseUpdateAction
         if (isStoped == false)
         {
             if ((PanelManagerInVillage.Instance.Panels[NameMap.PanelInteractive].state & CustomPanelState.ifOpen) == CustomPanelState.ifOpen
-                && Input.GetKeyDown(KeyCode.Q))
+                )
             {
-                NPCScript.NPCQuestUI.ClearQuest();
-                foreach (var i in p.NearestNPC.module.Quests)
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    NPCScript.NPCQuestUI.TryAddQuest(i.Value);
+                    NPCScript.NPCQuestUI.ClearQuest();
+                    foreach (var i in p.NearestNPC.module.Quests)
+                    {
+                        NPCScript.NPCQuestUI.TryAddQuest(i.Value);
+                    }
+                    PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelNPCQuest);
                 }
-
-                PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelNPCQuest);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    PanelManagerInVillage.Instance.ChangePanel(null, NameMap.PanelDialogue, () =>
+                    {
+                        p.NearestNPC.view.c.module.SetDialogueIndex(p.NearestNPC.view.c.module.dialogueIndex);
+                    });
+                }
             }
         }
     }
@@ -302,6 +213,138 @@ public class PlayerCheckStatus : BaseUpdateAction
                 {
                     tmpDic.Remove(i);
                 }
+            }
+        }
+    }
+}
+
+public class NewPlayerMove : BaseUpdateAction
+{
+    NavMeshAgent navMeshAgent;
+    Camera secondCamera;
+    Vector3 BackToPlayer;
+    bool isAutoNav;
+
+    Vector3 moveVector3;
+    Transform thistransform;
+    AnimationClip[] clips;
+
+    public NewPlayerMove(NavMeshAgent navMeshAgent, Camera secondCamera, Transform thistransform) : base(1)
+    {
+        this.navMeshAgent = navMeshAgent;
+        this.secondCamera = secondCamera;
+        this.thistransform = thistransform;
+        action += doAction;
+    }
+
+    public void doAction()
+    {
+        if (isStoped == false)
+        {
+            BackToPlayer = new Vector3(secondCamera.transform.position.x, thistransform.position.y, secondCamera.transform.position.z);
+            if (isAutoNav == false)
+            {
+
+                //thistransform.Rotate(new Vector3(0, Input.GetAxis("Horizontal"), 0));
+                if (Input.GetAxis("Vertical") != 0)
+                {
+                    navMeshAgent.velocity = thistransform.rotation * new Vector3(0, 0, Mathf.Abs(Input.GetAxis("Vertical")) * 2);
+                    thistransform.rotation = Quaternion.Lerp(thistransform.rotation, Quaternion.LookRotation((BackToPlayer - thistransform.position) * -Input.GetAxis("Vertical")), 0.1f);
+                }
+                if (Input.GetAxis("Horizontal") != 0)
+                {
+                    navMeshAgent.velocity = thistransform.rotation * new Vector3(0, 0, Mathf.Abs(Input.GetAxis("Horizontal")) * 2);
+                    thistransform.rotation = Quaternion.Lerp(thistransform.rotation, Quaternion.LookRotation(Quaternion.AngleAxis(90, Vector3.up) * (BackToPlayer - thistransform.position) * -Input.GetAxis("Horizontal")), 0.1f);
+                }
+
+            }
+            else
+            {
+                if (Vector3.Distance(thistransform.position, navMeshAgent.destination) < 1)
+                {
+                    isAutoNav = false;
+                }
+            }
+        }
+    }
+}
+
+public class AnimatorObverser : BaseUpdateAction
+{
+    PlayMoveScript p;
+    AnimationClip[] clips;
+    bool ReverseAni;
+    float timer;
+
+    public AnimatorObverser(PlayMoveScript p) : base(1)
+    {
+        this.p = p;
+        clips = p.animator.runtimeAnimatorController.animationClips;
+        action += doAction;
+    }
+
+    public void doAction()
+    {
+        if (isStoped == false)
+        {
+            p.animator.SetFloat("Speed", Mathf.Max(Mathf.Abs(Input.GetAxis("Vertical")), Mathf.Abs(Input.GetAxis("Horizontal"))) * 2);
+            //p.animator.SetFloat("Rotate", Input.GetAxis("Horizontal"));
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                p.animator.SetTrigger("Attack");
+            }
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                p.animator.SetTrigger("Skill");
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                p.animator.SetTrigger("Restore");
+            }
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                //p.navMeshAgent.updatePosition = false;
+                //p.animator.SetTrigger("Jump");
+                //ReverseAni = true;
+                //timer = 1;
+                //p.animator.speed = 0;
+                p.animator.Play("ReAttack", 1, 0);
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                p.animator.SetTrigger("Jump");
+            }
+
+            for (int i = 1; i < 3; i++)
+            {
+                AnimatorStateInfo s = p.animator.GetCurrentAnimatorStateInfo(i);
+                if (s.IsName("Jump"))
+                {
+                    foreach (var j in p.animator.GetCurrentAnimatorClipInfo(i))
+                    {
+                        //Debug.Log($"{j.clip.name}+{j.clip.frameRate}+{j.clip.length}+{j.clip.length * j.clip.frameRate}+" +
+                        //    $"{j.clip.length * j.clip.frameRate * s.normalizedTime}");
+                        if (j.clip.length * j.clip.frameRate * s.normalizedTime < 38 || j.clip.length * j.clip.frameRate * s.normalizedTime > 56)
+                        {
+                            p.navMeshAgent.velocity = Vector3.zero;
+                        }
+                        if (j.clip.length * j.clip.frameRate * s.normalizedTime > 56 && j.clip.length * j.clip.frameRate * s.normalizedTime < 57)
+                        {
+                            p.BigExplosion.SetActive(true);
+                            p.BigExplosion.GetComponent<ParticleSystem>().Play();
+                        }
+                    }
+                }
+            }
+            if (ReverseAni && timer > 0)
+            {
+                p.animator.Play("Attack", 1, timer);
+                timer -= Time.deltaTime / 3;
+            }
+            else
+            {
+                p.animator.speed = 1;
+                ReverseAni = false;
             }
         }
     }

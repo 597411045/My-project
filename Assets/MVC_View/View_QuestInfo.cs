@@ -82,4 +82,9 @@ public class View_QuestInfo : MonoBehaviour
         StatusUI.Add(MyUtil.FindOneInChildren(this.transform, "QuestStatusUI").GetComponent<Text>());
     }
 
+    private void OnDestroy()
+    {
+        c.UnlinkMV();
+    }
+
 }
